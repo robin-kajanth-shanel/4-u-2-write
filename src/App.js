@@ -1,26 +1,103 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react'; 
+import Modal from './Modal'
+import firebase from './firebase';
 import './styles.css';
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      modalOpen: false,
+      title: "",
+      time: "",
+      prompts: []
+    }
+  }
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  setTimer = (e) => {
+    e.preventDefault()
+    console.log(this.state.time)
+    // use setTimeout and this.state.time to set interval  
+  }
+
+  getFormSelection = (e) => { 
+    console.log(e.target.value)
+    this.setState({
+      time: e.target.value
+    })
+  }
+
+  saveTitle = (e) => { 
+    this.saveText(e, "title")
+  }
+
+  saveMessage = (e) => {
+    this.saveText(e, "message")
+  }
+
+  saveText = (e, typeOfText) => {
+    switch (typeOfText) {
+      case "title":
+        this.setState({
+          title: e.target.value,
+        });
+        break;
+      case "message":
+        this.setState({
+          title: e.target.value,
+        });
+        break;
+      default:
+        console.log("no text state to save found");
+    }
+    console.log(this.state.title)
+  }
+
+  toggleModal = () => {
+    this.setState({
+      modalOpen: !this.state.modalOpen
+    })
+  } 
+
+  render() {
+    return (
+      <div className="App">
+        <header> 
+          <h1>Placeholder Title</h1>
+          <button className="toggleButton"></button>
+        </header>
+
+        <main>
+          <h2>Prompt of The Day</h2>
+          <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ” </p>
+          <button onClick={this.toggleModal}>Get User Generated Prompts</button>
+          {this.state.modalOpen ? <Modal exitModal={this.toggleModal}/> : null }
+
+          <form action="" className="timeSelectForm" onSubmit={this.setTimer}>
+            <label htmlFor="intervals">How long do you want to write?</label>
+            <select name="intervals" id="intervals" onChange={this.getFormSelection}>
+              <option value="">Select an option</option>
+              <option value="300000">5 min</option>
+            </select>
+            <button type="submit">Submit</button>
+          </form>
+
+            <div>
+              <button>Export to PDF</button>
+              <form action="">
+                <label htmlFor="">Title</label>
+                <input type="text" placeholder="Title" onChange={this.saveTitle}/>
+                <textarea name="" id="" cols="30" rows="10" onChange={this.saveMessage}></textarea>
+                <div className="progressBar"></div>
+              </form>
+            </div>
+        </main>
+
+        <footer>
+
+        </footer>
+      </div>
+    );
+  }
 }
 
 export default App;
