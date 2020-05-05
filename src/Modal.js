@@ -3,6 +3,7 @@ import UserPrompt from './UserPrompt'
 import PromptSubmit from './PromptSubmit'
 
 class Modal extends Component {
+
     constructor() {
         super();
         this.state ={
@@ -26,7 +27,6 @@ class Modal extends Component {
                 <button onClick={this.props.exitModal}>Exit</button> 
                 <ul>
                     {this.props.userPrompts.map((prompt, index) => {
-                        
                         return(
                             <UserPrompt 
                                 key={index}
