@@ -1,7 +1,6 @@
 import React, { Component } from 'react'; 
 import Modal from './Modal'
 import firebase from './firebase';
-import UserPrompt from './UserPrompt'
 import './styles.css';
 class App extends Component {
   constructor() {
@@ -91,29 +90,13 @@ class App extends Component {
           <h2>Prompt of The Day</h2>
           <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ” </p>
           <button onClick={this.toggleModal}>Get User Generated Prompts</button>
-          {/* {this.state.modalOpen 
+          {this.state.modalOpen 
           ? <Modal 
           exitModal={this.toggleModal}
           selectPrompt={this.selectPrompt}
           userPrompts={this.state.userPrompts}
           /> 
-          : null } */}
-          <Modal
-            exitModal={this.toggleModal}
-            selectPrompt={this.selectPrompt}
-            userPrompts={this.state.userPrompts}
-          >
-            {this.state.userPrompts.map((prompt, index) => {
-              return (
-                <UserPrompt
-                  key={index}
-                  name={prompt.name}
-                  prompt={prompt.prompt}
-                  handleClick={this.selectPrompt(prompt.prompt)}
-                />
-              )
-            })}
-          </Modal>
+          : null }
           <form action="" className="timeSelectForm" onSubmit={this.setTimer}>
             <label htmlFor="intervals">How long do you want to write?</label>
             <select name="intervals" id="intervals" onChange={this.getFormSelection}>
