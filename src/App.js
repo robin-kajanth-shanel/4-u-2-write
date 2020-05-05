@@ -9,7 +9,8 @@ class App extends Component {
       modalOpen: false,
       title: "",
       time: "",
-      prompts: []
+      prompts: [],
+      selectedPrompt: ""
     }
   }
 
@@ -58,6 +59,12 @@ class App extends Component {
     })
   } 
 
+  selectPrompt = (prompt) => {
+    const selectedPrompt = prompt;
+    this.setState({selectedPrompt: selectedPrompt});
+    // display the selected prompt for the writer above the writing area
+  }
+
   render() {
     return (
       <div className="App">
@@ -70,8 +77,12 @@ class App extends Component {
           <h2>Prompt of The Day</h2>
           <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ” </p>
           <button onClick={this.toggleModal}>Get User Generated Prompts</button>
-          {this.state.modalOpen ? <Modal exitModal={this.toggleModal}/> : null }
-
+          {this.state.modalOpen 
+          ? <Modal 
+          exitModal={this.toggleModal}
+          selectPrompt={this.selectPrompt}
+          /> 
+          : null }
           <form action="" className="timeSelectForm" onSubmit={this.setTimer}>
             <label htmlFor="intervals">How long do you want to write?</label>
             <select name="intervals" id="intervals" onChange={this.getFormSelection}>
@@ -82,6 +93,7 @@ class App extends Component {
           </form>
 
             <div>
+              <p>Selected prompt: {this.state.selectedPrompt}</p>
               <button>Export to PDF</button>
               <form action="">
                 <label htmlFor="">Title</label>
