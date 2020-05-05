@@ -12,32 +12,28 @@ class App extends Component {
       time: "",
       prompts: [],
       selectedPrompt: "",
-      userPrompts: []
+      userPrompts: [],
     }
   }
 
   componentDidMount() {
     const dbRef = firebase.database().ref();
-    const promptsArray = [];
     dbRef.on("value", (snapshot) => {
       const data = snapshot.val();
+      const promptsArray = [];
       for (let key in data) {
-        console.log(data[key])
         promptsArray.unshift(data[key])
       }
+      this.setState({ userPrompts: promptsArray });
     })
-    this.setState({ userPrompts: promptsArray });
   }
-
 
   setTimer = (e) => {
     e.preventDefault()
-    console.log(this.state.time)
     // use setTimeout and this.state.time to set interval  
   }
 
   getFormSelection = (e) => { 
-    console.log(e.target.value)
     this.setState({
       time: e.target.value
     })
@@ -76,10 +72,12 @@ class App extends Component {
   } 
 
   selectPrompt = (prompt) => {
-    const selectedPrompt = prompt;
-    this.setState({selectedPrompt: selectedPrompt});
+    const selectedPrompt = prompt.target.value;
+    console.log("Prompt:", selectedPrompt);
+    this.setState({ selectedPrompt: selectedPrompt });
     // display the selected prompt for the writer above the writing area
   }
+
 
   render() {
     return (

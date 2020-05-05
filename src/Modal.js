@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import UserPrompt from './UserPrompt'
-import firebase from './firebase';
+import UserPrompt from './UserPrompt' 
 import PromptSubmit from './PromptSubmit'
 
 class Modal extends Component {
+<<<<<<< HEAD
     // constructor() {
     //     super();
     //     this.state ={
@@ -24,22 +24,42 @@ class Modal extends Component {
     //     this.setState({userPrompts: promptsArray});
     // }
 
+=======
+    constructor() {
+        super();
+        this.state ={
+            selectedPrompt: ""
+        }
+    }
+
+>>>>>>> e5cf98ecc10d79c60952cc5b1251748fc7617839
     // showSubmitForm = () => {
         
     // }
+
+    selectPrompt = (promptText) => {
+        const selectedPrompt = promptText
+        this.setState()
+        this.props.selectPrompt(selectedPrompt)
+    }
 
     render() {
         return (
             <div className="modal">
                 <button onClick={this.props.exitModal}>Exit</button> 
                 <ul>
+<<<<<<< HEAD
                     {/* {this.props.userPrompts.map((prompt, index) => {
+=======
+                    {this.props.userPrompts.map((prompt, index) => {
+                        
+>>>>>>> e5cf98ecc10d79c60952cc5b1251748fc7617839
                         return(
                             <UserPrompt 
                                 key={index}
                                 name={prompt.name}
                                 prompt={prompt.prompt}
-                                handleClick={this.props.selectPrompt(prompt.prompt)}
+                                handleClick={this.props.selectPrompt}
                             /> 
                         )
                     })} */}
