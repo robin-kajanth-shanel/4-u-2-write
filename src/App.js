@@ -1,6 +1,7 @@
 import React, { Component } from 'react'; 
 import Modal from './Modal'
 import firebase from './firebase';
+import UserPrompt from './UserPrompt'
 import './styles.css';
 class App extends Component {
   constructor() {
@@ -10,9 +11,24 @@ class App extends Component {
       title: "",
       time: "",
       prompts: [],
-      selectedPrompt: ""
+      selectedPrompt: "",
+      userPrompts: []
     }
   }
+
+  componentDidMount() {
+    const dbRef = firebase.database().ref();
+    const promptsArray = [];
+    dbRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      for (let key in data) {
+        console.log(data[key])
+        promptsArray.unshift(data[key])
+      }
+    })
+    this.setState({ userPrompts: promptsArray });
+  }
+
 
   setTimer = (e) => {
     e.preventDefault()
@@ -77,12 +93,29 @@ class App extends Component {
           <h2>Prompt of The Day</h2>
           <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ” </p>
           <button onClick={this.toggleModal}>Get User Generated Prompts</button>
-          {this.state.modalOpen 
+          {/* {this.state.modalOpen 
           ? <Modal 
           exitModal={this.toggleModal}
           selectPrompt={this.selectPrompt}
+          userPrompts={this.state.userPrompts}
           /> 
-          : null }
+          : null } */}
+          <Modal
+            exitModal={this.toggleModal}
+            selectPrompt={this.selectPrompt}
+            userPrompts={this.state.userPrompts}
+          >
+            {this.state.userPrompts.map((prompt, index) => {
+              return (
+                <UserPrompt
+                  key={index}
+                  name={prompt.name}
+                  prompt={prompt.prompt}
+                  handleClick={this.selectPrompt(prompt.prompt)}
+                />
+              )
+            })}
+          </Modal>
           <form action="" className="timeSelectForm" onSubmit={this.setTimer}>
             <label htmlFor="intervals">How long do you want to write?</label>
             <select name="intervals" id="intervals" onChange={this.getFormSelection}>
