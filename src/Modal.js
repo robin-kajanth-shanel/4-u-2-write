@@ -4,26 +4,6 @@ import PromptSubmit from './PromptSubmit'
 
 class Modal extends Component {
 
-    // constructor() {
-    //     super();
-    //     this.state ={
-    //         userPrompts: []
-    //     }
-    // }
-
-    // componentDidMount() {
-    //     const dbRef = firebase.database().ref();
-    //     const promptsArray = [];
-    //     dbRef.on("value", (snapshot) => {
-    //         const data = snapshot.val();
-    //         for (let key in data) {
-    //             console.log(data[key])
-    //             promptsArray.unshift(data[key])
-    //         }
-    //     })
-    //     this.setState({userPrompts: promptsArray});
-    // }
-
     constructor() {
         super();
         this.state ={
