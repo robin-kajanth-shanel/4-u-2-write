@@ -10,18 +10,29 @@ class App extends Component {
       title: "",
       time: "",
       prompts: [],
-      selectedPrompt: ""
+      selectedPrompt: "",
+      userPrompts: [],
     }
+  }
+
+  componentDidMount() {
+    const dbRef = firebase.database().ref();
+    dbRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      const promptsArray = [];
+      for (let key in data) {
+        promptsArray.unshift(data[key])
+      }
+      this.setState({ userPrompts: promptsArray });
+    })
   }
 
   setTimer = (e) => {
     e.preventDefault()
-    console.log(this.state.time)
     // use setTimeout and this.state.time to set interval  
   }
 
   getFormSelection = (e) => { 
-    console.log(e.target.value)
     this.setState({
       time: e.target.value
     })
@@ -60,10 +71,12 @@ class App extends Component {
   } 
 
   selectPrompt = (prompt) => {
-    const selectedPrompt = prompt;
-    this.setState({selectedPrompt: selectedPrompt});
+    const selectedPrompt = prompt.target.value;
+    console.log("Prompt:", selectedPrompt);
+    this.setState({ selectedPrompt: selectedPrompt });
     // display the selected prompt for the writer above the writing area
   }
+
 
   render() {
     return (
@@ -81,6 +94,7 @@ class App extends Component {
           ? <Modal 
           exitModal={this.toggleModal}
           selectPrompt={this.selectPrompt}
+          userPrompts={this.state.userPrompts}
           /> 
           : null }
           <form action="" className="timeSelectForm" onSubmit={this.setTimer}>
