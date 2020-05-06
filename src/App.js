@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Modal from "./Modal";
 import firebase from "./firebase";
+
+import Timer from "./Timer";
 import "./styles.css";
 class App extends Component {
   constructor() {
@@ -12,6 +14,7 @@ class App extends Component {
       prompts: [],
       selectedPrompt: "",
       userPrompts: [],
+      isCountingDown: false,
       // warningTimer: () => {
       //   setTimeout(() => {
       //     alert("time is up");
@@ -57,10 +60,16 @@ class App extends Component {
 
   stopTime = () => {
     // clearTimeout(this.state.warningTimer);
+    this.setState({
+      isCountingDown: false,
+    });
   };
 
   startTime = () => {
     // this.state.warningTimer();
+    this.setState({
+      isCountingDown: true,
+    });
   };
 
   saveText = (e, typeOfText) => {
@@ -129,6 +138,8 @@ class App extends Component {
             </select>
             <button type="submit">Submit</button>
           </form>
+
+          {this.state.isCountingDown ? <Timer secondsToCount="15" /> : null}
 
           <div>
             <p>Selected prompt: {this.state.selectedPrompt}</p>
