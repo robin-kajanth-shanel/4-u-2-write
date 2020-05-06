@@ -15,11 +15,7 @@ class App extends Component {
       selectedPrompt: "",
       userPrompts: [],
       isCountingDown: false,
-      // warningTimer: () => {
-      //   setTimeout(() => {
-      //     alert("time is up");
-      //   }, 5000);
-      // },
+      percentTime: ""
     };
   }
 
@@ -87,7 +83,6 @@ class App extends Component {
       default:
         console.log("no text state to save found");
     }
-    console.log(this.state.title);
   };
 
   toggleModal = () => {
@@ -102,6 +97,14 @@ class App extends Component {
     this.setState({ selectedPrompt: selectedPrompt });
     // display the selected prompt for the writer above the writing area
   };
+
+  getTime = (time) => {
+    let percent = Math.floor((time/15)*100) 
+    this.setState({
+      percentTime: percent
+    }) 
+    document.documentElement.style.setProperty('--inner-width', `${this.state.percentTime}%`)
+  }
 
   render() {
     return (
@@ -139,7 +142,7 @@ class App extends Component {
             <button type="submit">Submit</button>
           </form>
 
-          {this.state.isCountingDown ? <Timer secondsToCount="15" /> : null}
+          {this.state.isCountingDown ? <Timer secondsToCount="15" sendTime={this.getTime}/> : null}
 
           <div>
             <p>Selected prompt: {this.state.selectedPrompt}</p>
@@ -162,6 +165,9 @@ class App extends Component {
               ></textarea>
               <div className="progressBar"></div>
             </form>
+            <div className="outer" >
+              <div className="inner"></div>
+            </div>
           </div>
         </main>
 

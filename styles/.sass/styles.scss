@@ -1,5 +1,9 @@
 @import 'setup';
 
+:root {
+  --inner-width: 100%;
+}
+
 .wrapper {
     width: 80%; 
     margin: 0 auto;
@@ -20,3 +24,17 @@ main {position: relative;}
     bottom: 0;
     background-color: white;
 }
+
+// Timer progress bar
+.outer {
+    background-color: rgb(206, 206, 206);
+    width: 200px;
+    height: 20px; 
+}
+
+.inner {
+    background-color: pink;
+    height: 100%;
+    width: var(--inner-width);
+}
+
