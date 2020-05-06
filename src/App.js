@@ -21,9 +21,11 @@ class App extends Component {
       dailyPrompt: "",
       formDisable: false,
       stopTimer: false,
+      keepChecking: true
     };
   }
 
+  // On page load, get the user generated prompts saved to Firebase
   componentDidMount() {
     const dbRef = firebase.database().ref();
     dbRef.on("value", (snapshot) => {
@@ -36,6 +38,7 @@ class App extends Component {
     });
   }
 
+  // Gets the prompt of the day from the imported DailyPrompt function component
   getDailyPrompt = () => {
     const dailyPromptsArray = DailyPrompts();
     const today = new Date().getDate();
@@ -53,23 +56,27 @@ class App extends Component {
     });
 
     // Sets the writing timer according to the user's selection
-    const testTimer = setInterval(() => {
+    const writingTimer = setInterval(() => {
       this.setState({
-        elapsedTime: this.state.elapsedTime - 1000,
-      });
+        keepChecking: true,
+        elapsedTime: this.state.elapsedTime - 1000
+      })
+
       this.getTime();
 
       if (this.state.elapsedTime === 0) {
         this.setState({
+          keepChecking: false,
           formDisable: !this.state.formDisable,
           stopTimer: !this.state.stopTimer,
           elapsedTime: this.state.setTime,
         });
-        clearInterval(testTimer);
+        clearInterval(writingTimer);
       }
     }, 1000);
   };
 
+  // Gets the user's selected time and saves it in state
   getFormSelection = (e) => {
     this.setState({
       setTime: e.target.value,
@@ -77,29 +84,31 @@ class App extends Component {
     });
   };
 
+  // Saves the title input in the component state, on change
   saveTitle = (e) => {
     this.saveText(e, "title");
   };
 
+  // Saves the textarea input in the component state, on change
   saveMessage = (e) => {
-    // Set the 15sec warning timer once user starts the writing timer
     this.saveText(e, "message");
   };
 
+  // Stops the 15 second warning timer
   stopTime = () => {
-    // clearTimeout(this.state.warningTimer);
     this.setState({
       isCountingDown: false,
     });
   };
 
+  // Starts the 15 second warning timer
   startTime = () => {
-    // this.state.warningTimer();
     this.setState({
       isCountingDown: true,
     });
   };
 
+  // Switch case for saving text inputs into the component state
   saveText = (e, typeOfText) => {
     switch (typeOfText) {
       case "title":
@@ -117,19 +126,23 @@ class App extends Component {
     }
   };
 
+  // Toggles the visibility of the modal
   toggleModal = () => {
     this.setState({
       modalOpen: !this.state.modalOpen,
     });
   };
 
+  // On selecting a user generated prompt, display the selected prompt above the writing area and close the modal
   selectPrompt = (prompt) => {
     const selectedPrompt = prompt.target.value;
-    console.log("Prompt:", selectedPrompt);
-    this.setState({ selectedPrompt: selectedPrompt });
-    // display the selected prompt for the writer above the writing area
+    this.setState({
+      selectedPrompt: selectedPrompt,
+      modalOpen: !this.state.modalOpen
+    });
   };
 
+  // Calculates the elasped writing time as a percentage of time remaining to set the width of the progress bar
   getTime = () => {
     let percent = Math.floor(
       (this.state.elapsedTime / this.state.setTime) * 100
@@ -177,7 +190,7 @@ class App extends Component {
           </form>
 
           {this.state.isCountingDown ? (
-            <Timer secondsToCount="7" sendTime={this.getTime} />
+            <Timer secondsToCount="7" sendTime={this.getTime} keepChecking={this.state.keepChecking} />
           ) : null}
 
           <div>

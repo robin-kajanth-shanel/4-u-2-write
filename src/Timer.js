@@ -7,6 +7,7 @@ class Timer extends Component {
     super(props);
     this.state = {
       counter: 10,
+      keepChecking: true
     };
   }
 
@@ -14,24 +15,34 @@ class Timer extends Component {
     const { secondsToCount } = this.props;
     this.setState({
       counter: secondsToCount,
+      keepChecking: this.props.keepChecking
     });
-
+    // this.state.keepChecking ?
     this.doIntervalChange();
+    //   clearInterval(this.myInterval);
   }
 
   doIntervalChange = () => {
-    this.myInterval = setInterval(() => {
-      this.setState((prevState) => ({ counter: prevState.counter - 1 }));
-      this.props.sendTime(this.state.counter);
-      if (this.state.counter < 0) {
-        clearInterval(this.myInterval);
-        this.setState({
-          counter: 0,
-        });
-        alert("warning");
-      }
-    }, 1000);
+    if (this.props.keepChecking) {
+      this.myInterval = setInterval(() => {
+        this.setState((prevState) => ({ counter: prevState.counter - 1 }));
+        this.props.sendTime(this.state.counter);
+        if (this.state.counter < 0) {
+          clearInterval(this.myInterval);
+          this.setState({
+            counter: 0,
+          });
+          alert("warning");
+        }
+      }, 1000);
+    }
   };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.keepChecking !== prevProps.keepChecking) {
+      clearInterval(this.myInterval)
+    }
+  }
 
   componentWillUnmount() {
     clearInterval(this.myInterval);
