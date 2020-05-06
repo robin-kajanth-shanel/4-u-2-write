@@ -238,6 +238,7 @@ class App extends Component {
               ></textarea>
               <div className="progressBar"></div>
             </form>
+            <p>Word Count: {}</p>
             <div className="outer">
               <div className="inner"></div>
             </div>
