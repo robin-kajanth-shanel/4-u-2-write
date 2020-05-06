@@ -21,7 +21,10 @@ class App extends Component {
       dailyPrompt: "",
       formDisable: false,
       stopTimer: false,
-      keepChecking: true
+      keepChecking: true,
+      displayForm: false,
+      lightMode: false,
+      theme: "lightMode"
     };
   }
 
@@ -59,7 +62,8 @@ class App extends Component {
     const writingTimer = setInterval(() => {
       this.setState({
         keepChecking: true,
-        elapsedTime: this.state.elapsedTime - 1000
+        elapsedTime: this.state.elapsedTime - 1000,
+        displayForm: true
       })
 
       this.getTime();
@@ -156,12 +160,26 @@ class App extends Component {
     );
   };
 
+  //Toggles the light and dark mode theme
+  toggleTheme = () => {
+    this.setState({
+      lightMode: !this.state.lightMode
+    })
+    this.state.lightMode ?
+      this.setState({
+        theme: "lightMode"
+      }) :
+      this.setState({
+        theme: "darkMode"
+      });
+  }
+
   render() {
     return (
-      <div className="App">
+      <div className={`App ${this.state.theme}`} >
         <header>
           <h1>Placeholder Title</h1>
-          <button className="toggleButton"></button>
+          <button onClick={this.toggleTheme} className="toggleButton"></button>
         </header>
 
         <main>

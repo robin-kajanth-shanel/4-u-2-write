@@ -15,14 +15,17 @@ button {
 
 main {position: relative;}
 
-.modal {
-    border: 1px solid black;
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
+.toggleButton {
+    height: 50px;
+    width: 200px;
+}
+
+.lightMode {
     background-color: white;
+}
+
+.darkMode {
+    background-color: #23395b;
 }
 
 // Timer progress bar
