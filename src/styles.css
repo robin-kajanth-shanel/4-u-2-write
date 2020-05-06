@@ -249,6 +249,10 @@ html {
   overflow: hidden;
 }
 
+:root {
+  --inner-width: 100%;
+}
+
 .wrapper {
   width: 80%;
   margin: 0 auto;
@@ -270,4 +274,16 @@ main {
   left: 0;
   bottom: 0;
   background-color: white;
+}
+
+.outer {
+  background-color: #cecece;
+  width: 200px;
+  height: 20px;
+}
+
+.inner {
+  background-color: pink;
+  height: 100%;
+  width: var(--inner-width);
 }
