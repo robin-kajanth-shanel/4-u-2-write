@@ -219,25 +219,27 @@ class App extends Component {
                 ? "Time's up! Restart the timer to continue writing"
                 : null}
             </p>
-            <form action="">
-              <label htmlFor="">Title</label>
-              <input
-                type="text"
-                placeholder="Title"
-                onChange={this.saveTitle}
-              />
-              <textarea
-                name=""
-                id=""
-                cols="30"
-                rows="10"
-                disabled={this.state.formDisable ? true : false}
-                onChange={this.saveMessage}
-                onKeyDown={this.stopTime}
-                onKeyUp={this.startTime}
-              ></textarea>
-              <div className="progressBar"></div>
-            </form>
+            {this.state.displayForm
+              ? <form action="">
+                <label htmlFor="">Title</label>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  onChange={this.saveTitle}
+                />
+                <textarea
+                  name=""
+                  id=""
+                  cols="30"
+                  rows="10"
+                  disabled={this.state.formDisable ? true : false}
+                  onChange={this.saveMessage}
+                  onKeyDown={this.stopTime}
+                  onKeyUp={this.startTime}
+                ></textarea>
+                <div className="progressBar"></div>
+              </form>
+              : null}
             <p>Word Count: {}</p>
             <div className="outer">
               <div className="inner"></div>
