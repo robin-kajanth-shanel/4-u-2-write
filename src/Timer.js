@@ -22,9 +22,12 @@ class Timer extends Component {
   doIntervalChange = () => {
     this.myInterval = setInterval(() => {
       this.setState((prevState) => ({ counter: prevState.counter - 1 }));
-      this.props.sendTime(this.state.counter)
-      if (this.state.counter === 0) {
+      this.props.sendTime(this.state.counter);
+      if (this.state.counter < 0) {
         clearInterval(this.myInterval);
+        this.setState({
+          counter: 0,
+        });
         alert("warning");
       }
     }, 1000);

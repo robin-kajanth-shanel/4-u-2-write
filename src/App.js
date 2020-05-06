@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Modal from "./Modal";
 import firebase from "./firebase";
-
+import DailyPrompts from "./DailyPrompts";
 import Timer from "./Timer";
 import "./styles.css";
 class App extends Component {
@@ -10,12 +10,17 @@ class App extends Component {
     this.state = {
       modalOpen: false,
       title: "",
+      message: "",
       setTime: "",
+      elapsedTime: "",
       prompts: [],
       selectedPrompt: "",
       userPrompts: [],
       isCountingDown: false,
-      percentTime: ""
+      percentTime: "",
+      dailyPrompt: "",
+      formDisable: false,
+      stopTimer: false,
     };
   }
 
@@ -31,17 +36,44 @@ class App extends Component {
     });
   }
 
+  getDailyPrompt = () => {
+    const dailyPromptsArray = DailyPrompts();
+    const today = new Date().getDate();
+    const prompt = dailyPromptsArray[today - 1].dailyPrompt;
+    this.setState({
+      selectedPrompt: prompt,
+    });
+  };
+
   setTimer = (e) => {
     e.preventDefault();
+
+    this.setState({
+      formDisable: false,
+    });
+
     // Sets the writing timer according to the user's selection
-    setTimeout(() => {
-      alert("hi");
-    }, this.state.setTime);
+    const testTimer = setInterval(() => {
+      this.setState({
+        elapsedTime: this.state.elapsedTime - 1000,
+      });
+      this.getTime();
+
+      if (this.state.elapsedTime === 0) {
+        this.setState({
+          formDisable: !this.state.formDisable,
+          stopTimer: !this.state.stopTimer,
+          elapsedTime: this.state.setTime,
+        });
+        clearInterval(testTimer);
+      }
+    }, 1000);
   };
 
   getFormSelection = (e) => {
     this.setState({
       setTime: e.target.value,
+      elapsedTime: e.target.value,
     });
   };
 
@@ -77,7 +109,7 @@ class App extends Component {
         break;
       case "message":
         this.setState({
-          title: e.target.value,
+          message: e.target.value,
         });
         break;
       default:
@@ -98,13 +130,18 @@ class App extends Component {
     // display the selected prompt for the writer above the writing area
   };
 
-  getTime = (time) => {
-    let percent = Math.floor((time/15)*100) 
+  getTime = () => {
+    let percent = Math.floor(
+      (this.state.elapsedTime / this.state.setTime) * 100
+    );
     this.setState({
-      percentTime: percent
-    }) 
-    document.documentElement.style.setProperty('--inner-width', `${this.state.percentTime}%`)
-  }
+      percentTime: percent,
+    });
+    document.documentElement.style.setProperty(
+      "--inner-width",
+      `${this.state.percentTime}%`
+    );
+  };
 
   render() {
     return (
@@ -115,11 +152,8 @@ class App extends Component {
         </header>
 
         <main>
-          <h2>Prompt of The Day</h2>
-          <p>
-            “Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. ”{" "}
-          </p>
+          <h2>Choose Your Prompt</h2>
+          <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
           <button onClick={this.toggleModal}>Get User Generated Prompts</button>
           {this.state.modalOpen ? (
             <Modal
@@ -139,14 +173,21 @@ class App extends Component {
               <option value="5000">5 sec</option>
               <option value="10000">5 min</option>
             </select>
-            <button type="submit">Submit</button>
+            <button type="submit">Start Timer</button>
           </form>
 
-          {this.state.isCountingDown ? <Timer secondsToCount="15" sendTime={this.getTime}/> : null}
+          {this.state.isCountingDown ? (
+            <Timer secondsToCount="7" sendTime={this.getTime} />
+          ) : null}
 
           <div>
             <p>Selected prompt: {this.state.selectedPrompt}</p>
             <button>Export to PDF</button>
+            <p>
+              {this.state.formDisable
+                ? "Time's up! Restart the timer to continue writing"
+                : null}
+            </p>
             <form action="">
               <label htmlFor="">Title</label>
               <input
@@ -159,13 +200,14 @@ class App extends Component {
                 id=""
                 cols="30"
                 rows="10"
+                disabled={this.state.formDisable ? true : false}
                 onChange={this.saveMessage}
                 onKeyDown={this.stopTime}
                 onKeyUp={this.startTime}
               ></textarea>
               <div className="progressBar"></div>
             </form>
-            <div className="outer" >
+            <div className="outer">
               <div className="inner"></div>
             </div>
           </div>
