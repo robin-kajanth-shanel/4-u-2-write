@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import ReactDOM from 'react-dom';
+import React, { Component } from "react"; 
 import Modal from "./Modal";
 import firebase from "./firebase";
 import DailyPrompts from "./DailyPrompts";
@@ -308,21 +307,23 @@ class App extends Component {
                       onKeyDown={this.stopTime}
                       onKeyUp={this.startTime}
                     ></textarea>
+                    <div className="outer">
+                      <div className="inner"></div>
+                    </div>
                     <div className="formBottomBar">
                       <p>Word Count: {this.state.wordCount}</p>
                       <button type="reset" onClick={this.enableForm}>Clear</button>
                     </div>
                   </form>
-                  <div className="outer">
-                    <div className="inner"></div>
-                  </div>
                 </>
               )
               : null}
           </div>
         </main>
 
-        <footer></footer>
+        <footer className="wrapper">
+          <p>©2020 Kajanth, <a href="https://www.robinnong.com">Robin</a> and Shanel.</p>
+        </footer>
       </div>
     );
   }

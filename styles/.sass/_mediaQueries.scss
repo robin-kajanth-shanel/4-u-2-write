@@ -1,0 +1,21 @@
+/* MEDIA QUERIES */
+
+/* for small laptop screens */
+@media(max-width: 1050px) { 
+
+}
+
+/* for tablet screens */
+@media(max-width: 768px) {
+
+}
+/* For mobile screens */
+@media(max-width: 480px) {
+    input[type="text"] {width: 100%;}
+    
+    .wrapper {width: 85%;}
+
+    .modalInner { 
+        padding: 40px 30px; 
+    }
+}

@@ -49,8 +49,7 @@ class Timer extends Component {
     clearInterval(this.myInterval);
   }
 
-  render() {
-    const { counter } = this.state;
+  render() { 
     return (
       <div className="visuallyHidden">
       </div>

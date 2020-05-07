@@ -320,9 +320,9 @@ option {
 }
 
 body {
+  position: relative;
   font-family: "Lato", sans-serif;
-  min-width: 350px;
-  min-height: 100vh;
+  min-width: 320px;
   font-size: 1.8rem;
   font-weight: 300;
   color: var(--body-font-color);
@@ -331,6 +331,7 @@ body {
 .App {
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
+  min-height: 100vh;
 }
 
 header {
@@ -344,8 +345,22 @@ header {
 }
 
 main {
-  position: relative;
   padding: 100px 0;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 10px;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+footer a:hover,
+footer a:focus {
+  text-decoration: underline;
 }
 
 h1, h2, h3 {
@@ -362,6 +377,7 @@ h2 {
 }
 
 h3 {
+  margin-bottom: 5px;
   font-size: 2rem;
 }
 
@@ -384,7 +400,7 @@ h3 {
   width: 60px;
   background-color: #252525;
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
 }
 
 .toggleButton button i {
@@ -434,9 +450,134 @@ s
 .timeSelection button {
   background-color: #78cad2;
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
   padding: 10px 20px;
   margin: 5px 10px;
+}
+
+.modalOuter {
+  padding: 100px 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.modalInner {
+  position: relative;
+  padding: 50px 40px;
+  background-color: white;
+  color: #1a1a1a;
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+  -webkit-box-shadow: 0px 0px 20px 5px #1d1d1d1a;
+          box-shadow: 0px 0px 20px 5px #1d1d1d1a;
+}
+
+.exitButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 2rem;
+  border: none;
+}
+
+.modalTop {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.modalTop button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: none;
+}
+
+.modalTop button:hover, .modalTop button:focus {
+  color: #78cad2;
+}
+
+.modalTop button p {
+  padding: 0 5px;
+}
+
+.modalTop i {
+  font-size: 1.6rem;
+}
+
+.promptSubmitForm {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 20px;
+}
+
+.promptSubmitForm textarea {
+  margin-bottom: 20px;
+}
+
+.promptSubmitForm button {
+  color: inherit;
+  border: 2px solid #78cad2;
+  border-radius: 25px;
+  padding: 10px 20px;
+  width: 170px;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.promptSubmitForm button:hover, .promptSubmitForm button:focus {
+  background-color: #78cad2;
+}
+
+ul {
+  overflow: auto;
+}
+
+li {
+  border-left: 4px solid #78cad2;
+  padding: 0 10px;
+  margin: 30px 0;
+}
+
+li span {
+  font-weight: 700;
+}
+
+li p {
+  margin-bottom: 10px;
+}
+
+li button {
+  margin: 0 auto;
+  border: none;
+  border-radius: 5px;
+  background-color: #eae5e9;
+  padding: 5px 15px;
+}
+
+.writingComponent {
+  margin-top: 50px;
 }
 
 .formBottomBar {
@@ -450,19 +591,19 @@ s
       -ms-flex-align: center;
           align-items: center;
   margin: 10px 0;
-}
-
-button[type="reset"] {
-  background-color: #78cad2;
-  border: none;
-  border-radius: 20px;
-  padding: 5px;
-  width: 70px;
   font-size: 1.6rem;
 }
 
-.writingComponent {
-  margin-top: 50px;
+button[type="reset"] {
+  color: inherit;
+  border: 2px solid #78cad2;
+  border-radius: 25px;
+  padding: 5px;
+  width: 70px;
+}
+
+button[type="reset"]:hover, button[type="reset"]:focus {
+  background-color: #78cad2;
 }
 
 .timesUp {
@@ -519,17 +660,20 @@ button[type="reset"] {
           flex-direction: column;
 }
 
-.title {
+input[type="text"] {
   width: 50%;
-  font-size: 2.2rem;
-  font-weight: 700;
-  padding: 0 10px;
+  padding: 5px 10px;
   border: none;
   border-bottom: 1px solid #bebebe;
 }
 
-.title:focus {
+input[type="text"]:focus {
   border-bottom: 1px solid grey;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
 }
 
 textarea {
@@ -547,4 +691,20 @@ textarea:focus {
 
 select {
   padding: 5px 10px;
+}
+
+/* MEDIA QUERIES */
+/* for small laptop screens */
+/* for tablet screens */
+/* For mobile screens */
+@media (max-width: 480px) {
+  input[type="text"] {
+    width: 100%;
+  }
+  .wrapper {
+    width: 85%;
+  }
+  .modalInner {
+    padding: 40px 30px;
+  }
 }

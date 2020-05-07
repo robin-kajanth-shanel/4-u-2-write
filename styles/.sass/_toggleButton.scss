@@ -1,0 +1,36 @@
+.toggleButton { 
+    display: flex;
+    align-items: center;
+    span {margin-right: 5px;}
+    button {
+        position: relative;
+        height: 30px;
+        width: 60px;
+        background-color: #252525;
+        border: none; 
+        border-radius: 25px;  
+        i { 
+            font-size: 1.6rem;
+            margin: 0 5px;
+        }
+        &::after{
+            content: '';
+            height: 20px;
+            width: 20px; 
+            background-color: grey;
+            border-radius: 50%; 
+            position: absolute;
+            top: 5px; 
+            right: 6px;
+            transition: all 0.2s;
+        }
+    }
+}
+
+.move::after {transform: translateX(-27px);}
+
+.fa-moon,
+.fa-sun {color: #ececec;}
+
+.lightMode {background-color: white;}
+.darkMode {background-color: $darkblue;}

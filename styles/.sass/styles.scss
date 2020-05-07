@@ -1,6 +1,8 @@
 @import 'variables';
 @import 'setup';
 @import 'global';
+@import 'toggleButton';
+@import 'modalStyles';
 
 :root {
   --inner-width: 100%;
@@ -8,15 +10,18 @@
 } 
 
 body {
+    position: relative;
     font-family: $primaryfont;
-    min-width: 350px;
-    min-height: 100vh;
+    min-width: 320px;
     font-size: 1.8rem;
     font-weight: 300;
-    color: var(--body-font-color)
+    color: var(--body-font-color);
 }
 
-.App {transition: all 0.3s;}
+.App {
+    transition: all 0.3s;
+    min-height: 100vh;
+}
 
 header {
     padding-top: 30px; 
@@ -24,89 +29,57 @@ header {
     justify-content: space-between;
 }
 
-main {
-    position: relative;
-    padding: 100px 0;
-} 
+main {padding: 100px 0;} 
+
+footer{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 10px;
+    font-size: 1.6rem;
+    text-align: center;
+    a:hover,
+    a:focus {text-decoration: underline;}
+}
 
 h1, h2, h3 {font-family: $headerfont;}
+
 h1 {font-size: 3rem;}
+
 h2 {
     font-size: 2.2rem;
     margin-bottom: 10px;
 }
-h3 {font-size: 2rem;}
 
-.toggleButton { 
-    display: flex;
-    align-items: center;
-    span {margin-right: 5px;}
-    button {
-        position: relative;
-        height: 30px;
-        width: 60px;
-        background-color: #252525;
-        border: none; 
-        border-radius: 20px;  
-        i { 
-            font-size: 1.6rem;
-            margin: 0 5px;
-        }
-        &::after{
-            content: '';
-            height: 20px;
-            width: 20px; 
-            background-color: grey;
-            border-radius: 50%; 
-            position: absolute;
-            top: 5px; 
-            right: 6px;
-            transition: all 0.2s;
-        }
-    }
+h3 {
+    margin-bottom: 5px;
+    font-size: 2rem; 
 }
-
-.move::after {transform: translateX(-27px);}
-
-.fa-moon,
-.fa-sun {color: #ececec;}s
-.lightMode {background-color: white;}
-.darkMode {background-color: $darkblue;}
 
 .promptSelection,
 .timeSelection {
     text-align: center;
     padding: 30px 0;
-    button {  
-        background-color: $lightblue;
-        border: none;
-        border-radius: 20px;
-        padding: 10px 20px;
-        margin: 5px 10px;
-        &:hover,
-        &:focus { 
-        }
+        button {   
+        @include defaultButton(5px 10px)
     }
 }
+
+.writingComponent {margin-top: 50px;} 
 
 .formBottomBar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 10px 0;
-}
-
-button[type="reset"] {
-    background-color: $lightblue;
-    border: none;
-    border-radius: 20px;
-    padding: 5px; 
-    width: 70px;
     font-size: 1.6rem;
 }
 
-.writingComponent {
-    margin-top: 50px;
+button[type="reset"] {
+    @include altButton(5px, 70px)    
+        &:hover,
+        &:focus { background-color: $lightblue; }
 }
 
 .timesUp {
@@ -149,30 +122,17 @@ button[type="reset"] {
 }
 
 // Text areas for all forms
-.title {
+input[type="text"] {
     width: 50%;
-    font-size: 2.2rem;
-    font-weight: 700;
-    padding: 0 10px;
+    padding: 5px 10px;
     border: none;
     border-bottom: 1px solid $lightgrey;
-    &:focus {
-        border-bottom: 1px solid grey;
-    }
+    &:focus {border-bottom: 1px solid grey;}
 }
 
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 20px;
-    border: 1px solid $lightgrey;
-    overflow: auto;
-    resize: none;
-    &:focus {
-        border: 1px solid grey;
-    }
+.title {
+    font-size: 2.2rem;
+    font-weight: 700;
 }
 
-select {
-    padding: 5px 10px; 
-}
+@import 'mediaQueries';
