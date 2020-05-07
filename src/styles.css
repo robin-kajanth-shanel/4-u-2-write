@@ -293,6 +293,7 @@ img {
 }
 
 button {
+  font-weight: 400;
   background-color: inherit;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
@@ -305,6 +306,7 @@ textarea,
 select,
 option {
   font-family: "Lato", sans-serif;
+  color: #1a1a1a;
 }
 
 select,
@@ -315,10 +317,6 @@ option {
 :root {
   --inner-width: 100%;
   --body-font-color: $black;
-}
-
-button {
-  color: var(--body-font-color);
 }
 
 body {
@@ -347,7 +345,7 @@ header {
 
 main {
   position: relative;
-  padding: 100px;
+  padding: 100px 0;
 }
 
 h1, h2, h3 {
@@ -434,17 +432,69 @@ s
 
 .promptSelection button,
 .timeSelection button {
-  margin: 0 10px;
+  background-color: #78cad2;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin: 5px 10px;
 }
 
-.promptSelection button:hover, .promptSelection button:focus,
-.timeSelection button:hover,
-.timeSelection button:focus {
-  color: #78cad2;
+.formBottomBar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 10px 0;
+}
+
+button[type="reset"] {
+  background-color: #78cad2;
+  border: none;
+  border-radius: 20px;
+  padding: 5px;
+  width: 70px;
+  font-size: 1.6rem;
 }
 
 .writingComponent {
   margin-top: 50px;
+}
+
+.timesUp {
+  font-weight: 700;
+  text-align: center;
+  height: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.timesUp p {
+  margin: auto;
+}
+
+.saveToPDF {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.saveToPDF button {
+  font-size: 2.4rem;
+  border: none;
+  color: grey;
+  margin-left: 10px;
 }
 
 .outer {
@@ -457,8 +507,6 @@ s
   background-color: #78cad2;
   height: 100%;
   width: var(--inner-width);
-  -webkit-transition: all 1s;
-  transition: all 1s;
 }
 
 .writingForm {
@@ -472,6 +520,10 @@ s
 }
 
 .title {
+  width: 50%;
+  font-size: 2.2rem;
+  font-weight: 700;
+  padding: 0 10px;
   border: none;
   border-bottom: 1px solid #bebebe;
 }
@@ -482,8 +534,11 @@ s
 
 textarea {
   width: 100%;
-  margin: 20px 0;
+  padding: 10px;
+  margin-top: 20px;
   border: 1px solid #bebebe;
+  overflow: auto;
+  resize: none;
 }
 
 textarea:focus {

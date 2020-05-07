@@ -15,8 +15,8 @@ class App extends Component {
       title: "",
       message: "",
       wordCount: "",
-      setTime: "",
-      elapsedTime: "",
+      setTime: 10000,
+      elapsedTime: 10000,
       prompts: [],
       selectedPrompt: "",
       userPrompts: [],
@@ -29,7 +29,9 @@ class App extends Component {
       displayForm: false,
       lightMode: false,
       theme: "lightMode",
-      pdfClass: "visuallyHidden"
+      pdfClass: "visuallyHidden",
+      titleComplete: "",
+      messageComplete: ""
     };
   }
 
@@ -70,13 +72,12 @@ class App extends Component {
         elapsedTime: this.state.elapsedTime - 1000,
         displayForm: true,
       });
-
       this.getTime();
 
       if (this.state.elapsedTime === 0) {
         this.setState({
           keepChecking: false,
-          formDisable: !this.state.formDisable,
+          formDisable: true,
           stopTimer: !this.state.stopTimer,
           elapsedTime: this.state.setTime,
         });
@@ -90,7 +91,7 @@ class App extends Component {
     this.setState({
       setTime: e.target.value,
       elapsedTime: e.target.value,
-    });
+    })
   };
 
   // Saves the title input in the component state, on change
@@ -188,7 +189,7 @@ class App extends Component {
     if (this.state.lightMode) {
       this.setState({
         theme: "lightMode"
-      }) 
+      })
       document.documentElement.style.setProperty("--body-font-color", "black")
     } else {
       this.setState({
@@ -198,21 +199,27 @@ class App extends Component {
     }
   }
 
-  displayPDFLink = () => {
+  // Saves the input on submit
+  savePDF = () => {
     this.setState({
+      titleComplete: this.state.title,
+      messageComplete: this.state.message,
       pdfClass: ""
     })
   }
+
+  enableForm = () => { this.setState({ formDisable: false }) }
+
   render() {
     return (
       <div className={`App ${this.state.theme}`} >
         <header className="wrapper">
-          <h1>Placeholder Title</h1>
-          <div class="toggleButton">
-            <span>{this.state.lightMode ? "Light" : "Dark"} Mode</span> 
-            <button className={this.state.lightMode? "move": null} onClick={this.toggleTheme}>
-              <i class="fas fa-moon"></i>
-              <i class="fas fa-sun"></i>
+          <h1>Story Starter</h1>
+          <div className="toggleButton">
+            <span>{this.state.lightMode ? "Light" : "Dark"} Mode</span>
+            <button className={this.state.lightMode ? "move" : null} onClick={this.toggleTheme}>
+              <i className="fas fa-moon"></i>
+              <i className="fas fa-sun"></i>
             </button>
           </div>
         </header>
@@ -221,7 +228,7 @@ class App extends Component {
           <div className="promptSelection">
             <h2>Choose Your Prompt</h2>
             <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
-            <button onClick={this.toggleModal}>Get User Generated Prompts</button>
+            <button onClick={this.toggleModal}>Get User Prompts</button>
           </div>
           {this.state.modalOpen ? (
             <Modal
@@ -237,37 +244,47 @@ class App extends Component {
               id="intervals"
               onChange={this.getFormSelection}
             >
-              <option value="">Select an option</option>
-              <option value="5000">5 sec</option>
-              <option value="10000">5 min</option>
+              <option value="10000">10 sec</option>
+              <option value="30000">30 sec</option>
+              <option value="300000">5 min</option>
             </select>
-            <button type="submit" onClick={this.displayPDFLink}>Start Timer</button>
+            <button type="submit">Start Timer</button>
           </form>
 
           {this.state.isCountingDown ? (
             <Timer
-              secondsToCount="7"
+              secondsToCount="15"
               sendTime={this.getTime}
               keepChecking={this.state.keepChecking}
             />
           ) : null}
 
           <div className="writingComponent">
-            <h3>Selected Prompt</h3>
+            <h3>Selected Prompt:</h3>
             <p>{this.state.selectedPrompt}</p>
-            <p>
-              {this.state.formDisable
-                ? "Time's up! Restart the timer to continue writing"
-                : null}
-            </p>
+            <div className="timesUp">
+              <p>
+                {this.state.formDisable
+                  ? "Time's up! Restart the timer to continue writing"
+                  : null}
+              </p>
+            </div>
 
-            <PDFDownloadLink className={this.state.pdfClass} document={
-              <PDFExport
-                title={this.state.title}
-                message={this.state.message}
-              />} fileName={`${this.state.title}.pdf`}>
-              {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
-            </PDFDownloadLink>
+            <div className="saveToPDF">
+              <PDFDownloadLink className={this.state.pdfClass} document={
+                <PDFExport
+                  title={this.state.titleComplete}
+                  message={this.state.messageComplete}
+                />} fileName={`${this.state.titleComplete}.pdf`}>
+                {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+              </PDFDownloadLink>
+              {this.state.displayForm ?
+                <button type="button" onClick={this.savePDF} aria-label="Save To PDF">
+                  <i className="far fa-file-pdf" aria-hidden="true"></i>
+                </button>
+                : null
+              }
+            </div>
 
             {this.state.displayForm
               ? (
@@ -291,11 +308,14 @@ class App extends Component {
                       onKeyDown={this.stopTime}
                       onKeyUp={this.startTime}
                     ></textarea>
+                    <div className="formBottomBar">
+                      <p>Word Count: {this.state.wordCount}</p>
+                      <button type="reset" onClick={this.enableForm}>Clear</button>
+                    </div>
                   </form>
                   <div className="outer">
                     <div className="inner"></div>
                   </div>
-                  <p>Word Count: {this.state.wordCount}</p>
                 </>
               )
               : null}

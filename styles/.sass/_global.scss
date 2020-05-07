@@ -37,6 +37,7 @@ a {
 img {display: block;}
 
 button {
+    font-weight: 400;
     background-color: inherit;
     transition: all 0.3s;  
     cursor: pointer;    
@@ -46,7 +47,10 @@ button,
 input,
 textarea,
 select,
-option {font-family: $primaryfont;}
+option {
+    font-family: $primaryfont;
+    color: $black;
+}
 
 select,
 option {cursor: pointer;}

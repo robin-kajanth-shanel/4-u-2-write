@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import swal from "sweetalert";
 
 // Code modified from Coding Entrepeneurs: https://www.youtube.com/watch?v=NAx76xx40jM
 
@@ -32,7 +33,7 @@ class Timer extends Component {
           this.setState({
             counter: 0,
           });
-          alert("warning");
+          swal({ text: "Keep writing!" });
         }
       }, 1000);
     }
@@ -51,8 +52,7 @@ class Timer extends Component {
   render() {
     const { counter } = this.state;
     return (
-      <div>
-        <h3>Current Count: {counter}</h3>
+      <div className="visuallyHidden">
       </div>
     );
   }
