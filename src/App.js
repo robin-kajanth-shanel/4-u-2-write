@@ -203,10 +203,6 @@ class App extends Component {
       pdfClass: ""
     })
   }
-<<<<<<< HEAD
-=======
-    
->>>>>>> 8d55f46c9edb084df66b8eb91e23b1f7524135e5
   render() {
     return (
       <div className={`App ${this.state.theme}`} >
