@@ -46,6 +46,7 @@ const PDFExport = (props) => (
             <View style={styles.section}>
                 <Text style={[styles.title]}>{props.title}</Text>
                 <Text style={[styles.bodyText]}>{props.message}</Text>
+                
             </View>
         </Page>
     </Document>

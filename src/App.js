@@ -7,6 +7,9 @@ import Timer from "./Timer";
 import "./styles.css";
 import { PDFViewer, PDFDownloadLink, Document, Page } from '@react-pdf/renderer';
 import PDFExport from './PDFExport';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import RichTextEditor from './RichTextEditor'
 class App extends Component {
   constructor() {
     super();
@@ -298,6 +301,7 @@ class App extends Component {
                       placeholder="Title"
                       onChange={this.saveTitle}
                     />
+                    <RichTextEditor/>
                     <textarea
                       name=""
                       id=""
