@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import ReactDOM from 'react-dom';
 import Modal from "./Modal";
 import firebase from "./firebase";
 import DailyPrompts from "./DailyPrompts";
 import Timer from "./Timer";
 import "./styles.css";
+import { PDFViewer, PDFDownloadLink, Document, Page } from '@react-pdf/renderer';
+import PDFExport from './PDFExport';
 class App extends Component {
   constructor() {
     super();
@@ -11,6 +14,7 @@ class App extends Component {
       modalOpen: false,
       title: "",
       message: "",
+      wordCount: "",
       setTime: "",
       elapsedTime: "",
       prompts: [],
@@ -24,7 +28,8 @@ class App extends Component {
       keepChecking: true,
       displayForm: false,
       lightMode: false,
-      theme: "lightMode"
+      theme: "lightMode",
+      pdfClass: "visuallyHidden"
     };
   }
 
@@ -63,8 +68,8 @@ class App extends Component {
       this.setState({
         keepChecking: true,
         elapsedTime: this.state.elapsedTime - 1000,
-        displayForm: true
-      })
+        displayForm: true,
+      });
 
       this.getTime();
 
@@ -112,6 +117,16 @@ class App extends Component {
     });
   };
 
+  wordCount = () => {
+    const words = this.state.message;
+    const numWords = words.split(" ").filter((item) => {
+      return item !== "";
+    });
+    this.setState({
+      wordCount: numWords.length,
+    });
+  };
+
   // Switch case for saving text inputs into the component state
   saveText = (e, typeOfText) => {
     switch (typeOfText) {
@@ -121,9 +136,14 @@ class App extends Component {
         });
         break;
       case "message":
-        this.setState({
-          message: e.target.value,
-        });
+        this.setState(
+          {
+            message: e.target.value,
+          },
+          () => {
+            this.wordCount();
+          }
+        );
         break;
       default:
         console.log("no text state to save found");
@@ -142,7 +162,7 @@ class App extends Component {
     const selectedPrompt = prompt.target.value;
     this.setState({
       selectedPrompt: selectedPrompt,
-      modalOpen: !this.state.modalOpen
+      modalOpen: !this.state.modalOpen,
     });
   };
 
@@ -163,8 +183,8 @@ class App extends Component {
   //Toggles the light and dark mode theme
   toggleTheme = () => {
     this.setState({
-      lightMode: !this.state.lightMode
-    })
+      lightMode: !this.state.lightMode,
+    });
     if (this.state.lightMode) {
       this.setState({
         theme: "lightMode"
@@ -178,6 +198,11 @@ class App extends Component {
     }
   }
 
+  displayPDFLink = () => {
+    this.setState({
+      pdfClass: ""
+    })
+    
   render() {
     return (
       <div className={`App ${this.state.theme}`} >
@@ -216,11 +241,15 @@ class App extends Component {
               <option value="5000">5 sec</option>
               <option value="10000">5 min</option>
             </select>
-            <button type="submit">Start Timer</button>
+            <button type="submit" onClick={this.displayPDFLink}>Start Timer</button>
           </form>
 
           {this.state.isCountingDown ? (
-            <Timer secondsToCount="7" sendTime={this.getTime} keepChecking={this.state.keepChecking} />
+            <Timer
+              secondsToCount="7"
+              sendTime={this.getTime}
+              keepChecking={this.state.keepChecking}
+            />
           ) : null}
 
           <div className="writingComponent">
@@ -231,6 +260,15 @@ class App extends Component {
                 ? "Time's up! Restart the timer to continue writing"
                 : null}
             </p>
+
+          <PDFDownloadLink className={this.state.pdfClass} document={
+              <PDFExport
+                title={this.state.title}
+                message={this.state.message}
+              />} fileName={`${this.state.title}.pdf`}>
+              {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+            </PDFDownloadLink>
+
             <form action="" className="writingForm">
               <label htmlFor="title" className="sr-only">Title</label>
               <input
@@ -252,7 +290,36 @@ class App extends Component {
               ></textarea>
               <div className="progressBar"></div>
             </form>
-            <p>Word Count: {}</p>
+            <p>Word Count: {this.state.wordCount}</p>
+            
+            {this.state.displayForm
+              ? (
+                <div>
+
+                  <form action="">
+                    <label htmlFor="">Title</label>
+                    <input
+                      type="text"
+                      placeholder="Title"
+                      onChange={this.saveTitle}
+                    />
+                    <textarea
+                      name=""
+                      id=""
+                      cols="30"
+                      rows="10"
+                      disabled={this.state.formDisable ? true : false}
+                      onChange={this.saveMessage}
+                      onKeyDown={this.stopTime}
+                      onKeyUp={this.startTime}
+                    ></textarea>
+                    <div className="progressBar"></div>
+                  </form>
+                 
+                </div>
+              )
+              
+              : null}
             <div className="outer">
               <div className="inner"></div>
             </div>
@@ -264,5 +331,6 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;
