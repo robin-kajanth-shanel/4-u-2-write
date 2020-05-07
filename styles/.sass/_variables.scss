@@ -6,4 +6,18 @@ $black: #1a1a1a;
 $primaryfont:  'Lato', sans-serif;
 $headerfont: 'Josefin Sans', sans-serif;
  
- 
+@mixin defaultButton($margin) {
+    background-color: $lightblue;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin: $margin; 
+}
+
+@mixin altButton($padding, $width) {
+    color: inherit;
+    border: 2px solid $lightblue; 
+    border-radius: 25px; 
+    padding: $padding; 
+    width: $width;
+}
