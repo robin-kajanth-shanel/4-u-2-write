@@ -1,0 +1,52 @@
+/* smooth scroll and default font size set */
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+}
+
+/* default wrapper - DO NOT CHANGE */
+.wrapper {
+    width: 80%;
+    max-width: 1050px;
+    margin: 0 auto;
+}
+
+/* removes default padding and margins*/
+body,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+button,
+p {
+	margin: 0;
+    padding: 0;
+}
+
+/* removes list style bullets */
+li {list-style: none;}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s; 
+}
+
+img {display: block;}
+
+button {
+    background-color: inherit;
+    transition: all 0.3s;  
+    cursor: pointer;    
+}
+
+button,
+input,
+textarea,
+select,
+option {font-family: $primaryfont;}
+
+select,
+option {cursor: pointer;}

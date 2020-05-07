@@ -1,43 +1,148 @@
+@import 'variables';
 @import 'setup';
+@import 'global';
 
 :root {
   --inner-width: 100%;
+  --body-font-color: $black;
 }
 
-.wrapper {
-    width: 80%; 
-    margin: 0 auto;
+button {color: var(--body-font-color)}
+
+body {
+    font-family: $primaryfont;
+    min-width: 350px;
+    min-height: 100vh;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--body-font-color)
 }
 
-button {
-    cursor: pointer;
+.App {transition: all 0.3s;}
+
+header {
+    padding-top: 30px; 
+    display: flex;
+    justify-content: space-between;
 }
 
-main {position: relative;}
+main {
+    position: relative;
+    padding: 100px;
+} 
 
-.toggleButton {
-    height: 50px;
-    width: 200px;
+h1, h2, h3 {font-family: $headerfont;}
+h1 {font-size: 3rem;}
+h2 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+h3 {font-size: 2rem;}
+
+.toggleButton { 
+    display: flex;
+    align-items: center;
+    span {margin-right: 5px;}
+    button {
+        position: relative;
+        height: 30px;
+        width: 60px;
+        background-color: #252525;
+        border: none; 
+        border-radius: 20px;  
+        i { 
+            font-size: 1.6rem;
+            margin: 0 5px;
+        }
+        &::after{
+            content: '';
+            height: 20px;
+            width: 20px; 
+            background-color: grey;
+            border-radius: 50%; 
+            position: absolute;
+            top: 5px; 
+            right: 6px;
+            transition: all 0.2s;
+        }
+    }
 }
 
-.lightMode {
-    background-color: white;
+.move::after {transform: translateX(-27px);}
+
+.fa-moon,
+.fa-sun {color: #ececec;}s
+.lightMode {background-color: white;}
+.darkMode {background-color: $darkblue;}
+
+.promptSelection,
+.timeSelection {
+    text-align: center;
+    padding: 30px 0;
+    button { 
+        margin: 0 10px;
+        &:hover,
+        &:focus {
+            color: $lightblue; 
+        }
+    }
 }
 
-.darkMode {
-    background-color: #23395b;
+.writingComponent {
+    margin-top: 50px;
 }
 
 // Timer progress bar
 .outer {
-    background-color: rgb(206, 206, 206);
-    width: 200px;
-    height: 20px; 
+    background-color: #f1f1f1;
+    width: 100%;
+    height: 10px; 
 }
 
 .inner {
-    background-color: pink;
+    background-color: $lightblue;
     height: 100%;
     width: var(--inner-width);
+    transition: all 1s;
 }
 
+// Export to PDF Button
+.exportPDF {
+    border: none;
+        i {
+        font-size: 2.4rem;
+        color: grey;
+        transition: all 0.2s;
+            &:hover {
+                color: $black;
+        }
+    }
+}
+
+// Writing Form
+.writingForm {
+    display: flex;
+    flex-direction: column;
+}
+
+// Text areas for all forms
+.title {
+    border: none;
+    border-bottom: 1px solid $lightgrey;
+    &:focus {
+        border-bottom: 1px solid grey;
+    }
+}
+
+textarea {
+    width: 100%;
+    margin: 20px 0;
+    border: 1px solid $lightgrey;
+    &:focus {
+        border: 1px solid grey;
+    }
+}
+
+select {
+    padding: 5px 10px; 
+}

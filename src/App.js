@@ -165,27 +165,39 @@ class App extends Component {
     this.setState({
       lightMode: !this.state.lightMode
     })
-    this.state.lightMode ?
+    if (this.state.lightMode) {
       this.setState({
         theme: "lightMode"
-      }) :
+      }) 
+      document.documentElement.style.setProperty("--body-font-color", "black")
+    } else {
       this.setState({
         theme: "darkMode"
       });
+      document.documentElement.style.setProperty("--body-font-color", "white")
+    }
   }
 
   render() {
     return (
       <div className={`App ${this.state.theme}`} >
-        <header>
+        <header className="wrapper">
           <h1>Placeholder Title</h1>
-          <button onClick={this.toggleTheme} className="toggleButton"></button>
+          <div class="toggleButton">
+            <span>{this.state.lightMode ? "Light" : "Dark"} Mode</span> 
+            <button className={this.state.lightMode? "move": null} onClick={this.toggleTheme}>
+              <i class="fas fa-moon"></i>
+              <i class="fas fa-sun"></i>
+            </button>
+          </div>
         </header>
 
-        <main>
-          <h2>Choose Your Prompt</h2>
-          <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
-          <button onClick={this.toggleModal}>Get User Generated Prompts</button>
+        <main className="wrapper">
+          <div className="promptSelection">
+            <h2>Choose Your Prompt</h2>
+            <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
+            <button onClick={this.toggleModal}>Get User Generated Prompts</button>
+          </div>
           {this.state.modalOpen ? (
             <Modal
               exitModal={this.toggleModal}
@@ -193,8 +205,8 @@ class App extends Component {
               userPrompts={this.state.userPrompts}
             />
           ) : null}
-          <form action="" className="timeSelectForm" onSubmit={this.setTimer}>
-            <label htmlFor="intervals">How long do you want to write?</label>
+          <form action="" className="timeSelection" onSubmit={this.setTimer}>
+            <h2>How long do you want to write?</h2>
             <select
               name="intervals"
               id="intervals"
@@ -211,18 +223,23 @@ class App extends Component {
             <Timer secondsToCount="7" sendTime={this.getTime} keepChecking={this.state.keepChecking} />
           ) : null}
 
-          <div>
-            <p>Selected prompt: {this.state.selectedPrompt}</p>
-            <button>Export to PDF</button>
+          <div className="writingComponent">
+            <h3>Selected Prompt</h3>
+            <p>{this.state.selectedPrompt}</p>
+            <button className="exportPDF" aria-label="Export to PDF"> 
+              <i class="far fa-file-pdf" aria-hidden="true"></i>
+            </button>
             <p>
               {this.state.formDisable
                 ? "Time's up! Restart the timer to continue writing"
                 : null}
             </p>
-            <form action="">
-              <label htmlFor="">Title</label>
+            <form action="" className="writingForm">
+              <label htmlFor="title" className="sr-only">Title</label>
               <input
                 type="text"
+                className="title"
+                id="title"
                 placeholder="Title"
                 onChange={this.saveTitle}
               />

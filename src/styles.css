@@ -249,28 +249,175 @@ html {
   overflow: hidden;
 }
 
-:root {
-  --inner-width: 100%;
+/* smooth scroll and default font size set */
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
 }
 
+/* default wrapper - DO NOT CHANGE */
 .wrapper {
   width: 80%;
+  max-width: 1050px;
   margin: 0 auto;
 }
 
+/* removes default padding and margins*/
+body,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+button,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+/* removes list style bullets */
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+img {
+  display: block;
+}
+
 button {
+  background-color: inherit;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
   cursor: pointer;
+}
+
+button,
+input,
+textarea,
+select,
+option {
+  font-family: "Lato", sans-serif;
+}
+
+select,
+option {
+  cursor: pointer;
+}
+
+:root {
+  --inner-width: 100%;
+  --body-font-color: $black;
+}
+
+button {
+  color: var(--body-font-color);
+}
+
+body {
+  font-family: "Lato", sans-serif;
+  min-width: 350px;
+  min-height: 100vh;
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--body-font-color);
+}
+
+.App {
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+header {
+  padding-top: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 main {
   position: relative;
+  padding: 100px;
+}
+
+h1, h2, h3 {
+  font-family: "Josefin Sans", sans-serif;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 2rem;
 }
 
 .toggleButton {
-  height: 50px;
-  width: 200px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
+.toggleButton span {
+  margin-right: 5px;
+}
+
+.toggleButton button {
+  position: relative;
+  height: 30px;
+  width: 60px;
+  background-color: #252525;
+  border: none;
+  border-radius: 20px;
+}
+
+.toggleButton button i {
+  font-size: 1.6rem;
+  margin: 0 5px;
+}
+
+.toggleButton button::after {
+  content: '';
+  height: 20px;
+  width: 20px;
+  background-color: grey;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.move::after {
+  -webkit-transform: translateX(-27px);
+          transform: translateX(-27px);
+}
+
+.fa-moon,
+.fa-sun {
+  color: #ececec;
+}
+
+s
 .lightMode {
   background-color: white;
 }
@@ -279,14 +426,85 @@ main {
   background-color: #23395b;
 }
 
+.promptSelection,
+.timeSelection {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.promptSelection button,
+.timeSelection button {
+  margin: 0 10px;
+}
+
+.promptSelection button:hover, .promptSelection button:focus,
+.timeSelection button:hover,
+.timeSelection button:focus {
+  color: #78cad2;
+}
+
+.writingComponent {
+  margin-top: 50px;
+}
+
 .outer {
-  background-color: #cecece;
-  width: 200px;
-  height: 20px;
+  background-color: #f1f1f1;
+  width: 100%;
+  height: 10px;
 }
 
 .inner {
-  background-color: pink;
+  background-color: #78cad2;
   height: 100%;
   width: var(--inner-width);
+  -webkit-transition: all 1s;
+  transition: all 1s;
+}
+
+.exportPDF {
+  border: none;
+}
+
+.exportPDF i {
+  font-size: 2.4rem;
+  color: grey;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.exportPDF i:hover {
+  color: #1a1a1a;
+}
+
+.writingForm {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.title {
+  border: none;
+  border-bottom: 1px solid #bebebe;
+}
+
+.title:focus {
+  border-bottom: 1px solid grey;
+}
+
+textarea {
+  width: 100%;
+  margin: 20px 0;
+  border: 1px solid #bebebe;
+}
+
+textarea:focus {
+  border: 1px solid grey;
+}
+
+select {
+  padding: 5px 10px;
 }
