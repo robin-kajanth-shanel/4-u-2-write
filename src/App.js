@@ -203,6 +203,10 @@ class App extends Component {
       pdfClass: ""
     })
   }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 8d55f46c9edb084df66b8eb91e23b1f7524135e5
   render() {
     return (
       <div className={`App ${this.state.theme}`} >
@@ -261,7 +265,7 @@ class App extends Component {
                 : null}
             </p>
 
-          <PDFDownloadLink className={this.state.pdfClass} document={
+            <PDFDownloadLink className={this.state.pdfClass} document={
               <PDFExport
                 title={this.state.title}
                 message={this.state.message}
@@ -269,37 +273,15 @@ class App extends Component {
               {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
             </PDFDownloadLink>
 
-            <form action="" className="writingForm">
-              <label htmlFor="title" className="sr-only">Title</label>
-              <input
-                type="text"
-                className="title"
-                id="title"
-                placeholder="Title"
-                onChange={this.saveTitle}
-              />
-              <textarea
-                name=""
-                id=""
-                cols="30"
-                rows="10"
-                disabled={this.state.formDisable ? true : false}
-                onChange={this.saveMessage}
-                onKeyDown={this.stopTime}
-                onKeyUp={this.startTime}
-              ></textarea>
-              <div className="progressBar"></div>
-            </form>
-            <p>Word Count: {this.state.wordCount}</p>
-            
             {this.state.displayForm
               ? (
-                <div>
-
-                  <form action="">
-                    <label htmlFor="">Title</label>
+                <>
+                  <form action="" className="writingForm">
+                    <label htmlFor="title" className="sr-only">Title</label>
                     <input
                       type="text"
+                      className="title"
+                      id="title"
                       placeholder="Title"
                       onChange={this.saveTitle}
                     />
@@ -313,16 +295,14 @@ class App extends Component {
                       onKeyDown={this.stopTime}
                       onKeyUp={this.startTime}
                     ></textarea>
-                    <div className="progressBar"></div>
                   </form>
-                 
-                </div>
+                  <div className="outer">
+                    <div className="inner"></div>
+                  </div>
+                  <p>Word Count: {this.state.wordCount}</p>
+                </>
               )
-              
               : null}
-            <div className="outer">
-              <div className="inner"></div>
-            </div>
           </div>
         </main>
 
