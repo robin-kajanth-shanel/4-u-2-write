@@ -5,9 +5,7 @@
 :root {
   --inner-width: 100%;
   --body-font-color: $black;
-}
-
-button {color: var(--body-font-color)}
+} 
 
 body {
     font-family: $primaryfont;
@@ -28,7 +26,7 @@ header {
 
 main {
     position: relative;
-    padding: 100px;
+    padding: 100px 0;
 } 
 
 h1, h2, h3 {font-family: $headerfont;}
@@ -79,17 +77,56 @@ h3 {font-size: 2rem;}
 .timeSelection {
     text-align: center;
     padding: 30px 0;
-    button { 
-        margin: 0 10px;
+    button {  
+        background-color: $lightblue;
+        border: none;
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin: 5px 10px;
         &:hover,
-        &:focus {
-            color: $lightblue; 
+        &:focus { 
         }
     }
 }
 
+.formBottomBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+button[type="reset"] {
+    background-color: $lightblue;
+    border: none;
+    border-radius: 20px;
+    padding: 5px; 
+    width: 70px;
+    font-size: 1.6rem;
+}
+
 .writingComponent {
     margin-top: 50px;
+}
+
+.timesUp {
+    font-weight: 700;
+    text-align: center;
+    height: 50px; 
+    display: flex;
+    p {margin: auto;}
+}
+
+.saveToPDF { 
+    display: flex; 
+    align-items: center;
+    justify-content: flex-end;
+    button {
+        font-size: 2.4rem;
+        border: none; 
+        color: grey;
+        margin-left: 10px;
+    }
 }
 
 // Timer progress bar
@@ -102,8 +139,7 @@ h3 {font-size: 2rem;}
 .inner {
     background-color: $lightblue;
     height: 100%;
-    width: var(--inner-width);
-    transition: all 1s;
+    width: var(--inner-width); 
 }
 
 // Writing Form
@@ -114,6 +150,10 @@ h3 {font-size: 2rem;}
 
 // Text areas for all forms
 .title {
+    width: 50%;
+    font-size: 2.2rem;
+    font-weight: 700;
+    padding: 0 10px;
     border: none;
     border-bottom: 1px solid $lightgrey;
     &:focus {
@@ -123,8 +163,11 @@ h3 {font-size: 2rem;}
 
 textarea {
     width: 100%;
-    margin: 20px 0;
+    padding: 10px;
+    margin-top: 20px;
     border: 1px solid $lightgrey;
+    overflow: auto;
+    resize: none;
     &:focus {
         border: 1px solid grey;
     }
