@@ -461,21 +461,6 @@ s
   transition: all 1s;
 }
 
-.exportPDF {
-  border: none;
-}
-
-.exportPDF i {
-  font-size: 2.4rem;
-  color: grey;
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s;
-}
-
-.exportPDF i:hover {
-  color: #1a1a1a;
-}
-
 .writingForm {
   display: -webkit-box;
   display: -ms-flexbox;

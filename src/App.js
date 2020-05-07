@@ -226,9 +226,6 @@ class App extends Component {
           <div className="writingComponent">
             <h3>Selected Prompt</h3>
             <p>{this.state.selectedPrompt}</p>
-            <button className="exportPDF" aria-label="Export to PDF"> 
-              <i class="far fa-file-pdf" aria-hidden="true"></i>
-            </button>
             <p>
               {this.state.formDisable
                 ? "Time's up! Restart the timer to continue writing"
