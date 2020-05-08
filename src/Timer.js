@@ -33,7 +33,9 @@ class Timer extends Component {
           this.setState({
             counter: 0,
           });
-          swal({ text: "Keep writing!" });
+          swal({ 
+            text: "Keep writing!"
+           });
         }
       }, 1000);
     }

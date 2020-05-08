@@ -20,10 +20,9 @@ class PromptSubmit extends Component {
         this.props.closeModal()
     }
     
+    // Sets the state of the matching id (name or prompt) to the corresponding input value
     handleUserInput = (e) => {
-        this.setState({
-            [e.target.id]: e.target.value
-        })
+        this.setState({ [e.target.id]: e.target.value })
     }
 
     render() {
@@ -31,7 +30,7 @@ class PromptSubmit extends Component {
             <>
                 <div className="modalTop"> 
                     <button className="backButton" onClick={this.props.back}>
-                        <i className="fas fa-chevron-left"></i>
+                        <i className="fas fa-chevron-left" aria-hidden="true"></i>
                         <p>Back to User Prompts</p>
                     </button>
                 </div>
