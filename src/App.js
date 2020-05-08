@@ -1,8 +1,9 @@
-import React, { Component } from "react"; 
+import React, { Component } from "react";
 import Modal from "./Modal";
 import firebase from "./firebase";
 import DailyPrompts from "./DailyPrompts";
 import Timer from "./Timer";
+import Form from './Form'
 import "./styles.css";
 import { PDFViewer, PDFDownloadLink, Document, Page } from '@react-pdf/renderer';
 import PDFExport from './PDFExport';
@@ -16,8 +17,8 @@ class App extends Component {
       title: "",
       message: "",
       wordCount: "",
-      setTime: 10000,
-      elapsedTime: 10000,
+      setTime: 300000,
+      elapsedTime: 300000,
       prompts: [],
       selectedPrompt: "",
       userPrompts: [],
@@ -78,8 +79,8 @@ class App extends Component {
       // When the timer reaches 0 
       if (this.state.elapsedTime === 0) {
         // Display the pop-up modal
-        swal({ 
-          text: "Time's up! Restart the timer to continue writing" 
+        swal({
+          text: "Time's up! Restart the timer to continue writing"
         });
 
         this.setState({
@@ -109,6 +110,8 @@ class App extends Component {
   // Saves the textarea input in the component state, on change
   saveMessage = (e) => {
     this.saveText(e, "message");
+    this.stopTime();
+    this.startTime();
   };
 
   // Stops the 15 second warning timer
@@ -215,7 +218,7 @@ class App extends Component {
     })
   }
 
-  enableForm = () => { this.setState({ formDisable: false }) } 
+  enableForm = () => { this.setState({ formDisable: false }) }
 
   render() {
     return (
@@ -235,7 +238,7 @@ class App extends Component {
           <div className="promptSelection">
             <h2>Choose Your Prompt</h2>
             <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
-            <button onClick={this.toggleModal}>Get User Prompts</button>  
+            <button onClick={this.toggleModal}>Get User Prompts</button>
           </div>
           {this.state.modalOpen ? (
             <Modal
@@ -251,13 +254,14 @@ class App extends Component {
               id="intervals"
               onChange={this.getFormSelection}
             >
-              <option value="10000">10 sec</option> 
               <option value="300000">5 min</option>
               <option value="600000">10 min</option>
               <option value="1200000">20 min</option>
               <option value="1800000">30 min</option>
+              <option value="2700000">45 min</option>
+              <option value="3600000">1 hr</option>
             </select>
-            <button type="submit">Start Timer</button>
+            <button type="submit" onClick={this.startTime}>Start Timer</button>
           </form>
 
           {this.state.isCountingDown ? (
@@ -290,35 +294,13 @@ class App extends Component {
 
             {this.state.displayForm
               ? (
-                <>
-                  <form action="" className="writingForm">
-                    <label htmlFor="title" className="sr-only">Title</label>
-                    <input
-                      type="text"
-                      className="title"
-                      id="title"
-                      placeholder="Title"
-                      onChange={this.saveTitle}
-                    />
-                    <textarea
-                      name=""
-                      id=""
-                      cols="30"
-                      rows="10"
-                      disabled={this.state.formDisable ? true : false}
-                      onChange={this.saveMessage}
-                      onKeyDown={this.stopTime}
-                      onKeyUp={this.startTime}
-                    ></textarea>
-                    <div className="outer">
-                      <div className="inner"></div>
-                    </div>
-                    <div className="formBottomBar">
-                      <p>Word Count: {this.state.wordCount}</p>
-                      <button type="reset" onClick={this.enableForm}>Clear</button>
-                    </div>
-                  </form>
-                </>
+                <Form
+                  saveTitle={this.saveTitle}
+                  disableForm={this.state.formDisable}
+                  saveMessage={this.saveMessage}
+                  wordCount={this.state.wordCount}
+                  enableForm={this.enableForm}
+                />
               )
               : null}
           </div>
