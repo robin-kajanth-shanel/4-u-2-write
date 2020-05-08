@@ -14,9 +14,11 @@
     background-color: white; 
     color: $black;
     width: 80%;
+    height: 80vh;
     max-width: 800px;
     margin: 0 auto;
     box-shadow: 0px 0px 20px 5px #1d1d1d1a;
+    overflow: auto;
 }
 
 .exitButton {
@@ -48,7 +50,9 @@
 .promptSubmitForm {
     display: flex;
     flex-direction: column; 
+    justify-content: center;
     margin-top: 20px;
+    height: 100%;
     textarea {
         margin-bottom: 20px;
     }
@@ -58,23 +62,27 @@
         &:hover,
         &:focus { background-color: $lightblue; }
     }
-} 
-
-ul {
-    overflow: auto;
-}
+}  
 
 li { 
     border-left: 4px solid $lightblue;
     padding: 0 10px; 
     margin: 30px 0;
-    span {font-weight: 700;}
+    span { 
+        color: grey;
+    }
     p {margin-bottom: 10px;}
     button {
+        font-size: 1.6rem; 
         margin: 0 auto;
-        border: none;
+        border: 1px solid #cecece;
         border-radius: 5px;
-        background-color: $lightpink;
         padding: 5px 15px;
+        box-shadow: 0px 0px 5px 5px #7c7c7c11;
+        &:hover,
+        &:focus {
+            color: $lightblue;
+            border: 1px solid $lightblue;
+        }
     }
 }

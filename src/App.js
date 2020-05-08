@@ -243,9 +243,10 @@ class App extends Component {
               id="intervals"
               onChange={this.getFormSelection}
             >
-              <option value="10000">10 sec</option>
-              <option value="30000">30 sec</option>
+              <option value="15000">15 sec</option>
               <option value="300000">5 min</option>
+              <option value="600000">10 min</option>
+              <option value="1200000">20 min</option>
             </select>
             <button type="submit">Start Timer</button>
           </form>
