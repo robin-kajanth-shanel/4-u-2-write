@@ -314,71 +314,21 @@ option {
   cursor: pointer;
 }
 
-:root {
-  --inner-width: 100%;
-  --body-font-color: $black;
+select {
+  padding: 5px 10px;
 }
 
-body {
-  position: relative;
-  font-family: "Lato", sans-serif;
-  min-width: 320px;
-  font-size: 1.8rem;
-  font-weight: 300;
-  color: var(--body-font-color);
-}
-
-.App {
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  min-height: 100vh;
-}
-
-header {
-  padding-top: 30px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-}
-
-main {
-  padding: 100px 0;
-}
-
-footer {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
+textarea {
+  width: 100%;
   padding: 10px;
-  font-size: 1.6rem;
-  text-align: center;
+  margin-top: 20px;
+  border: 1px solid #bebebe;
+  overflow: auto;
+  resize: none;
 }
 
-footer a:hover,
-footer a:focus {
-  text-decoration: underline;
-}
-
-h1, h2, h3 {
-  font-family: "Josefin Sans", sans-serif;
-}
-
-h1 {
-  font-size: 3rem;
-}
-
-h2 {
-  font-size: 2.2rem;
-  margin-bottom: 10px;
-}
-
-h3 {
-  margin-bottom: 5px;
-  font-size: 2rem;
+textarea:focus {
+  border: 1px solid grey;
 }
 
 .toggleButton {
@@ -431,28 +381,12 @@ h3 {
   color: #ececec;
 }
 
-s
 .lightMode {
   background-color: white;
 }
 
 .darkMode {
   background-color: #23395b;
-}
-
-.promptSelection,
-.timeSelection {
-  text-align: center;
-  padding: 30px 0;
-}
-
-.promptSelection button,
-.timeSelection button {
-  background-color: #78cad2;
-  border: none;
-  border-radius: 25px;
-  padding: 10px 20px;
-  margin: 5px 10px;
 }
 
 .modalOuter {
@@ -466,14 +400,16 @@ s
 
 .modalInner {
   position: relative;
-  padding: 50px 40px;
+  padding: 40px;
   background-color: white;
   color: #1a1a1a;
   width: 80%;
+  height: 80vh;
   max-width: 800px;
   margin: 0 auto;
   -webkit-box-shadow: 0px 0px 20px 5px #1d1d1d1a;
           box-shadow: 0px 0px 20px 5px #1d1d1d1a;
+  overflow: auto;
 }
 
 .exitButton {
@@ -512,7 +448,7 @@ s
   color: #78cad2;
 }
 
-.modalTop button p {
+.modalTop p {
   padding: 0 5px;
 }
 
@@ -528,7 +464,11 @@ s
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   margin-top: 20px;
+  height: 100%;
 }
 
 .promptSubmitForm textarea {
@@ -550,18 +490,15 @@ s
   background-color: #78cad2;
 }
 
-ul {
-  overflow: auto;
-}
-
 li {
-  border-left: 4px solid #78cad2;
-  padding: 0 10px;
+  text-align: center;
+  background-color: whitesmoke;
+  padding: 10px;
   margin: 30px 0;
 }
 
 li span {
-  font-weight: 700;
+  color: grey;
 }
 
 li p {
@@ -569,15 +506,110 @@ li p {
 }
 
 li button {
+  background-color: white;
+  font-size: 1.6rem;
   margin: 0 auto;
-  border: none;
+  border: 1px solid #cecece;
   border-radius: 5px;
-  background-color: #eae5e9;
   padding: 5px 15px;
+  -webkit-box-shadow: 0px 0px 5px 5px #7c7c7c11;
+          box-shadow: 0px 0px 5px 5px #7c7c7c11;
+}
+
+li button:hover, li button:focus {
+  color: #78cad2;
+  border: 1px solid #78cad2;
+}
+
+:root {
+  --inner-width: 100%;
+  --body-font-color: $black;
+}
+
+body {
+  position: relative;
+  font-family: "Lato", sans-serif;
+  min-width: 320px;
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--body-font-color);
+}
+
+.App {
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  min-height: 100vh;
+}
+
+header {
+  padding-top: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+main {
+  padding: 100px 0;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 15px;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+footer a:hover,
+footer a:focus {
+  text-decoration: underline;
+}
+
+h1, h2, h3 {
+  font-family: "Josefin Sans", sans-serif;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+h3 {
+  margin-bottom: 5px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.promptSelection,
+.timeSelection {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.promptSelection button,
+.timeSelection button {
+  background-color: #78cad2;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  margin: 5px 10px;
 }
 
 .writingComponent {
   margin-top: 50px;
+}
+
+.prompt {
+  text-align: center;
 }
 
 .formBottomBar {
@@ -676,35 +708,34 @@ input[type="text"]:focus {
   font-weight: 700;
 }
 
-textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  border: 1px solid #bebebe;
-  overflow: auto;
-  resize: none;
-}
-
-textarea:focus {
-  border: 1px solid grey;
-}
-
-select {
-  padding: 5px 10px;
-}
-
 /* MEDIA QUERIES */
 /* for small laptop screens */
 /* for tablet screens */
 /* For mobile screens */
 @media (max-width: 480px) {
+  h1 {
+    font-size: 2.6rem;
+  }
   input[type="text"] {
     width: 100%;
   }
   .wrapper {
-    width: 85%;
+    width: 90%;
   }
   .modalInner {
-    padding: 40px 30px;
+    padding: 30px 20px;
+    width: 90%;
+  }
+  .modalTop {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+        -ms-flex-direction: column-reverse;
+            flex-direction: column-reverse;
+  }
+  .modalTop p {
+    padding: 0;
+  }
+  .modalTop button {
+    margin-bottom: 10px;
   }
 }
