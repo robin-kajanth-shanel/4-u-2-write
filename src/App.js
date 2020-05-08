@@ -1,25 +1,22 @@
-import React, { Component } from "react"; 
+import React, { Component } from "react";
 import Modal from "./Modal";
 import firebase from "./firebase";
 import DailyPrompts from "./DailyPrompts";
-import Timer from "./Timer";
+import Theme from "./Theme";
+
 import "./styles.css";
-import { PDFViewer, PDFDownloadLink, Document, Page } from '@react-pdf/renderer';
-import PDFExport from './PDFExport';
+
+import RichText from "./RichText";
 class App extends Component {
   constructor() {
     super();
     this.state = {
       modalOpen: false,
-      title: "",
-      message: "",
-      wordCount: "",
       setTime: 10000,
       elapsedTime: 10000,
       prompts: [],
       selectedPrompt: "",
       userPrompts: [],
-      isCountingDown: false,
       percentTime: "",
       dailyPrompt: "",
       formDisable: false,
@@ -28,9 +25,8 @@ class App extends Component {
       displayForm: false,
       lightMode: false,
       theme: "lightMode",
-      pdfClass: "visuallyHidden",
       titleComplete: "",
-      messageComplete: ""
+      messageComplete: "",
     };
   }
 
@@ -90,64 +86,7 @@ class App extends Component {
     this.setState({
       setTime: e.target.value,
       elapsedTime: e.target.value,
-    })
-  };
-
-  // Saves the title input in the component state, on change
-  saveTitle = (e) => {
-    this.saveText(e, "title");
-  };
-
-  // Saves the textarea input in the component state, on change
-  saveMessage = (e) => {
-    this.saveText(e, "message");
-  };
-
-  // Stops the 15 second warning timer
-  stopTime = () => {
-    this.setState({
-      isCountingDown: false,
     });
-  };
-
-  // Starts the 15 second warning timer
-  startTime = () => {
-    this.setState({
-      isCountingDown: true,
-    });
-  };
-
-  wordCount = () => {
-    const words = this.state.message;
-    const numWords = words.split(" ").filter((item) => {
-      return item !== "";
-    });
-    this.setState({
-      wordCount: numWords.length,
-    });
-  };
-
-  // Switch case for saving text inputs into the component state
-  saveText = (e, typeOfText) => {
-    switch (typeOfText) {
-      case "title":
-        this.setState({
-          title: e.target.value,
-        });
-        break;
-      case "message":
-        this.setState(
-          {
-            message: e.target.value,
-          },
-          () => {
-            this.wordCount();
-          }
-        );
-        break;
-      default:
-        console.log("no text state to save found");
-    }
   };
 
   // Toggles the visibility of the modal
@@ -187,40 +126,30 @@ class App extends Component {
     });
     if (this.state.lightMode) {
       this.setState({
-        theme: "lightMode"
-      })
-      document.documentElement.style.setProperty("--body-font-color", "black")
+        theme: "lightMode",
+      });
+      document.documentElement.style.setProperty("--body-font-color", "black");
     } else {
       this.setState({
-        theme: "darkMode"
+        theme: "darkMode",
       });
-      document.documentElement.style.setProperty("--body-font-color", "white")
+      document.documentElement.style.setProperty("--body-font-color", "white");
     }
-  }
+  };
 
-  // Saves the input on submit
-  savePDF = () => {
-    this.setState({
-      titleComplete: this.state.title,
-      messageComplete: this.state.message,
-      pdfClass: ""
-    })
-  }
-
-  enableForm = () => { this.setState({ formDisable: false }) }
+  enableForm = () => {
+    this.setState({ formDisable: false });
+  };
 
   render() {
     return (
-      <div className={`App ${this.state.theme}`} >
+      <div className={`App ${this.state.theme}`}>
         <header className="wrapper">
           <h1>Story Starter</h1>
-          <div className="toggleButton">
-            <span>{this.state.lightMode ? "Light" : "Dark"} Mode</span>
-            <button className={this.state.lightMode ? "move" : null} onClick={this.toggleTheme}>
-              <i className="fas fa-moon"></i>
-              <i className="fas fa-sun"></i>
-            </button>
-          </div>
+          <Theme
+            toggleTheme={this.toggleTheme}
+            lightMode={this.state.lightMode}
+          />
         </header>
 
         <main className="wrapper">
@@ -250,14 +179,6 @@ class App extends Component {
             <button type="submit">Start Timer</button>
           </form>
 
-          {this.state.isCountingDown ? (
-            <Timer
-              secondsToCount="15"
-              sendTime={this.getTime}
-              keepChecking={this.state.keepChecking}
-            />
-          ) : null}
-
           <div className="writingComponent">
             <h3>Selected Prompt:</h3>
             <p>{this.state.selectedPrompt}</p>
@@ -269,65 +190,26 @@ class App extends Component {
               </p>
             </div>
 
-            <div className="saveToPDF">
-              <PDFDownloadLink className={this.state.pdfClass} document={
-                <PDFExport
-                  title={this.state.titleComplete}
-                  message={this.state.messageComplete}
-                />} fileName={`${this.state.titleComplete}.pdf`}>
-                {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
-              </PDFDownloadLink>
-              {this.state.displayForm ?
-                <button type="button" onClick={this.savePDF} aria-label="Save To PDF">
-                  <i className="far fa-file-pdf" aria-hidden="true"></i>
-                </button>
-                : null
-              }
-            </div>
-
-            {this.state.displayForm
-              ? (
-                <>
-                  <form action="" className="writingForm">
-                    <label htmlFor="title" className="sr-only">Title</label>
-                    <input
-                      type="text"
-                      className="title"
-                      id="title"
-                      placeholder="Title"
-                      onChange={this.saveTitle}
-                    />
-                    <textarea
-                      name=""
-                      id=""
-                      cols="30"
-                      rows="10"
-                      disabled={this.state.formDisable ? true : false}
-                      onChange={this.saveMessage}
-                      onKeyDown={this.stopTime}
-                      onKeyUp={this.startTime}
-                    ></textarea>
-                    <div className="outer">
-                      <div className="inner"></div>
-                    </div>
-                    <div className="formBottomBar">
-                      <p>Word Count: {this.state.wordCount}</p>
-                      <button type="reset" onClick={this.enableForm}>Clear</button>
-                    </div>
-                  </form>
-                </>
-              )
-              : null}
+            {this.state.displayForm ? (
+              <RichText
+                getTime={this.getTime}
+                keepChecking={this.state.keepChecking}
+                displayForm={this.state.displayForm}
+                formDisable={this.state.formDisable}
+              />
+            ) : null}
           </div>
         </main>
 
         <footer className="wrapper">
-          <p>©2020 Kajanth, <a href="https://www.robinnong.com">Robin</a> and Shanel.</p>
+          <p>
+            ©2020 Kajanth, <a href="https://www.robinnong.com">Robin</a> and
+            Shanel.
+          </p>
         </footer>
       </div>
     );
   }
 }
-
 
 export default App;

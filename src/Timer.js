@@ -8,7 +8,7 @@ class Timer extends Component {
     super(props);
     this.state = {
       counter: 10,
-      keepChecking: true
+      keepChecking: true,
     };
   }
 
@@ -16,11 +16,9 @@ class Timer extends Component {
     const { secondsToCount } = this.props;
     this.setState({
       counter: secondsToCount,
-      keepChecking: this.props.keepChecking
+      keepChecking: this.props.keepChecking,
     });
-    // this.state.keepChecking ?
     this.doIntervalChange();
-    //   clearInterval(this.myInterval);
   }
 
   doIntervalChange = () => {
@@ -41,7 +39,7 @@ class Timer extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.keepChecking !== prevProps.keepChecking) {
-      clearInterval(this.myInterval)
+      clearInterval(this.myInterval);
     }
   }
 
@@ -49,11 +47,8 @@ class Timer extends Component {
     clearInterval(this.myInterval);
   }
 
-  render() { 
-    return (
-      <div className="visuallyHidden">
-      </div>
-    );
+  render() {
+    return <div className="visuallyHidden"></div>;
   }
 }
 
