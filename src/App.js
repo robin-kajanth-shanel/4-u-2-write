@@ -10,12 +10,21 @@ import PDFExport from './PDFExport';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import RichTextEditor from './RichTextEditor'
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import html2pdf from 'html2pdf.js';
+window.html2canvas = html2canvas;
+
+
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
       modalOpen: false,
-      title: "",
+      title: "Title",
       message: "",
       wordCount: "",
       setTime: 10000,
@@ -34,10 +43,35 @@ class App extends Component {
       theme: "lightMode",
       pdfClass: "visuallyHidden",
       titleComplete: "",
-      messageComplete: ""
+      messageComplete: "",
+      htmlMessage: ""
     };
-  }
 
+    this.modules = {
+      toolbar: [
+        [{ 'font': [] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        ['bold', 'italic', 'underline'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'align': [] }],
+        [{ 'color': [] }, { 'background': [] }],
+        ['clean']
+      ]
+    };
+
+    this.formats = [
+      'font',
+      'size',
+      'bold', 'italic', 'underline',
+      'list', 'bullet',
+      'align',
+      'color', 'background'
+    ];
+
+    this.rteChange = this.rteChange.bind(this);
+  }
+  
+  
   // On page load, get the user generated prompts saved to Firebase
   componentDidMount() {
     const dbRef = firebase.database().ref();
@@ -63,6 +97,8 @@ class App extends Component {
 
   setTimer = (e) => {
     e.preventDefault();
+    //start the stay awake 15 second timer
+    this.startTime()
 
     this.setState({
       formDisable: false,
@@ -213,6 +249,58 @@ class App extends Component {
 
   enableForm = () => { this.setState({ formDisable: false }) }
 
+  rteChange = (content, delta, source, editor) => {
+    console.log(editor.getHTML()); // rich text
+    console.log(editor.getText()); // plain text
+    console.log(editor.getLength()); // number of characters
+  }
+
+  handleEditorChange = (e, editor) => {
+    const text = this.getPlainText(editor.getData());
+      this.setState({ 
+        // htmlMessage: editor.getData(),
+        message: text
+      }, () => {
+          this.stopTime();
+          this.startTime();
+      }
+      );
+      
+  }
+
+  // copied from https://stackoverflow.com/questions/12895795/getting-non-html-text-from-ckeditor
+  getPlainText(text) {
+    return text.replace(/<[^>]*>/g, '');;
+    console.log(text);
+}
+
+  savejsPDF = () => {
+    // let doc = new jsPDF('p', 'pt', 'a4');
+    let elementHTML = this.state.htmlMessage;
+    const div = document.getElementById('hidden');
+    console.log(div);
+    div.insertAdjacentHTML('beforeend', elementHTML);
+    // doc.addHTML( elementHTML, function() {
+    //   doc.save(`${this.state.title}JSPDF.pdf`);
+    // });
+
+    // const filename = `${this.state.title}JSPDF.pdf`;
+
+    // html2canvas(this.state.htmlMessage).then(canvas => {
+    //   let pdf = new jsPDF('p', 'mm', 'a4');
+    //   pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+    //   pdf.save(filename);
+    // });
+    // var pdf = new jsPDF('p', 'pt', 'a4');
+    // console.log(elementHTML);
+    // pdf.addHTML(div, function () {
+    //   pdf.save('filename.pdf');
+    // // });
+    // let element = document.getElementById('element-to-print');
+    var element = document.getElementById('hidden');
+    html2pdf(element);
+  }
+
   render() {
     return (
       <div className={`App ${this.state.theme}`} >
@@ -272,12 +360,14 @@ class App extends Component {
                   : null}
               </p>
             </div>
-
+            <button onClick={this.savejsPDF}>JSPDF</button>
+            <div id="hidden"></div>
             <div className="saveToPDF">
               <PDFDownloadLink className={this.state.pdfClass} document={
                 <PDFExport
                   title={this.state.titleComplete}
                   message={this.state.messageComplete}
+                  htmlMessage={this.state.htmlMessage}
                 />} fileName={`${this.state.titleComplete}.pdf`}>
                 {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
               </PDFDownloadLink>
@@ -301,14 +391,20 @@ class App extends Component {
                       placeholder="Title"
                       onChange={this.saveTitle}
                     />
-                    <RichTextEditor/>
+                  </form>
+                    {/* <ReactQuill theme="snow" modules={this.modules}
+                    formats={this.formats} onChange={this.rteChange}
+                    value={this.state.message} /> */}
+                    <CKEditor
+                      editor={ClassicEditor}
+                      disabled={this.state.formDisable ? true : false}
+                      onChange={this.handleEditorChange}
+                      />
                     <textarea
                       name=""
                       id=""
                       cols="30"
                       rows="10"
-                      disabled={this.state.formDisable ? true : false}
-                      onChange={this.saveMessage}
                       onKeyDown={this.stopTime}
                       onKeyUp={this.startTime}
                     ></textarea>
@@ -316,7 +412,6 @@ class App extends Component {
                       <p>Word Count: {this.state.wordCount}</p>
                       <button type="reset" onClick={this.enableForm}>Clear</button>
                     </div>
-                  </form>
                   <div className="outer">
                     <div className="inner"></div>
                   </div>

@@ -1,5 +1,3 @@
-
-
 import React, { Component } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -31,7 +29,7 @@ class RichTextEditor extends Component {
         ];
 
         this.state = {
-            comments: ''
+            comments: props
         }
 
         this.rteChange = this.rteChange.bind(this);
