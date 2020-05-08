@@ -215,10 +215,10 @@ class App extends Component {
         <header className="wrapper">
           <h1>Story Starter</h1>
           <div className="toggleButton">
-            <span>{this.state.lightMode ? "Light" : "Dark"} Mode</span>
+            {/* <span>{this.state.lightMode ? "Dark" : "Light"} Mode</span> */}
             <button className={this.state.lightMode ? "move" : null} onClick={this.toggleTheme}>
-              <i className="fas fa-moon"></i>
               <i className="fas fa-sun"></i>
+              <i className="fas fa-moon"></i>
             </button>
           </div>
         </header>
@@ -260,7 +260,7 @@ class App extends Component {
 
           <div className="writingComponent">
             <h3>Selected Prompt:</h3>
-            <p>{this.state.selectedPrompt}</p>
+            <p className="prompt">{this.state.selectedPrompt}</p>
             <div className="timesUp">
               <p>
                 {this.state.formDisable
