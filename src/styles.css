@@ -400,7 +400,7 @@ textarea:focus {
 
 .modalInner {
   position: relative;
-  padding: 40px;
+  padding: 50px 40px;
   background-color: white;
   color: #1a1a1a;
   width: 80%;
@@ -448,12 +448,16 @@ textarea:focus {
   color: #78cad2;
 }
 
-.modalTop p {
-  padding: 0 5px;
-}
-
 .modalTop i {
   font-size: 1.6rem;
+}
+
+.fa-chevron-right {
+  margin-left: 5px;
+}
+
+.fa-chevron-left {
+  margin-right: 5px;
 }
 
 .promptSubmitForm {
@@ -589,6 +593,19 @@ h3 {
   text-align: center;
 }
 
+.swal-text {
+  text-align: center;
+}
+
+.swal-button {
+  background-color: #78cad2;
+  border: none;
+}
+
+.promptSelection button {
+  width: 200px;
+}
+
 .promptSelection,
 .timeSelection {
   text-align: center;
@@ -602,6 +619,13 @@ h3 {
   border-radius: 25px;
   padding: 10px 20px;
   margin: 5px 10px;
+}
+
+select {
+  border: 1px solid #bebebe;
+  border-radius: 5px;
+  margin-right: 5px;
+  width: 150px;
 }
 
 .writingComponent {
@@ -638,19 +662,6 @@ button[type="reset"]:hover, button[type="reset"]:focus {
   background-color: #78cad2;
 }
 
-.timesUp {
-  font-weight: 700;
-  text-align: center;
-  height: 50px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.timesUp p {
-  margin: auto;
-}
-
 .saveToPDF {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -661,12 +672,13 @@ button[type="reset"]:hover, button[type="reset"]:focus {
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
+  margin: 50px 0 10px 0;
 }
 
 .saveToPDF button {
   font-size: 2.4rem;
   border: none;
-  color: grey;
+  color: var(--body-font-color);
   margin-left: 10px;
 }
 
@@ -709,7 +721,6 @@ input[type="text"]:focus {
 }
 
 /* MEDIA QUERIES */
-/* for small laptop screens */
 /* for tablet screens */
 /* For mobile screens */
 @media (max-width: 480px) {
@@ -732,10 +743,27 @@ input[type="text"]:focus {
         -ms-flex-direction: column-reverse;
             flex-direction: column-reverse;
   }
-  .modalTop p {
-    padding: 0;
-  }
   .modalTop button {
     margin-bottom: 10px;
+  }
+  .timeSelection {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  select {
+    margin-bottom: 5px;
+    width: 200px;
+    text-align: center;
+  }
+  .timeSelection button {
+    width: 200px;
   }
 }

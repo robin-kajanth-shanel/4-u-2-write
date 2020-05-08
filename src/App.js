@@ -6,6 +6,8 @@ import Timer from "./Timer";
 import "./styles.css";
 import { PDFViewer, PDFDownloadLink, Document, Page } from '@react-pdf/renderer';
 import PDFExport from './PDFExport';
+import swal from "sweetalert";
+
 class App extends Component {
   constructor() {
     super();
@@ -73,7 +75,13 @@ class App extends Component {
       });
       this.getTime();
 
+      // When the timer reaches 0 
       if (this.state.elapsedTime === 0) {
+        // Display the pop-up modal
+        swal({ 
+          text: "Time's up! Restart the timer to continue writing" 
+        });
+
         this.setState({
           keepChecking: false,
           formDisable: true,
@@ -207,11 +215,11 @@ class App extends Component {
     })
   }
 
-  enableForm = () => { this.setState({ formDisable: false }) }
+  enableForm = () => { this.setState({ formDisable: false }) } 
 
   render() {
     return (
-      <div className={`App ${this.state.theme}`} >
+      <div className={`App ${this.state.theme}`}>
         <header className="wrapper">
           <h1>Story Starter</h1>
           <div className="toggleButton">
@@ -227,7 +235,7 @@ class App extends Component {
           <div className="promptSelection">
             <h2>Choose Your Prompt</h2>
             <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
-            <button onClick={this.toggleModal}>Get User Prompts</button>
+            <button onClick={this.toggleModal}>Get User Prompts</button>  
           </div>
           {this.state.modalOpen ? (
             <Modal
@@ -243,9 +251,11 @@ class App extends Component {
               id="intervals"
               onChange={this.getFormSelection}
             >
-              <option value="10000">10 sec</option>
-              <option value="30000">30 sec</option>
+              <option value="10000">10 sec</option> 
               <option value="300000">5 min</option>
+              <option value="600000">10 min</option>
+              <option value="1200000">20 min</option>
+              <option value="1800000">30 min</option>
             </select>
             <button type="submit">Start Timer</button>
           </form>
@@ -261,13 +271,6 @@ class App extends Component {
           <div className="writingComponent">
             <h3>Selected Prompt:</h3>
             <p className="prompt">{this.state.selectedPrompt}</p>
-            <div className="timesUp">
-              <p>
-                {this.state.formDisable
-                  ? "Time's up! Restart the timer to continue writing"
-                  : null}
-              </p>
-            </div>
 
             <div className="saveToPDF">
               <PDFDownloadLink className={this.state.pdfClass} document={
@@ -322,7 +325,7 @@ class App extends Component {
         </main>
 
         <footer className="wrapper">
-          <p>©2020 Kajanth, <a href="https://www.robinnong.com">Robin</a> and Shanel.</p>
+          <p>©2020 <a href="https://kajanthkumar.com/">Kajanth</a>, <a href="https://www.robinnong.com">Robin</a> and <a href="https://shanelbeebe.com/">Shanel</a>.</p>
         </footer>
       </div>
     );

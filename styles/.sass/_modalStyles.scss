@@ -10,7 +10,7 @@
 
 .modalInner {
     position: relative;
-    padding: 40px;
+    padding: 50px 40px;
     background-color: white; 
     color: $black;
     width: 80%;
@@ -34,18 +34,18 @@
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap; 
-    button {    
+    button {     
         display: flex;
-        align-items: center;
+        align-items: center; 
         border: none; 
         &:hover,
         &:focus {color: $lightblue}
     }
-    p{padding: 0 5px;}
-    i { 
-        font-size: 1.6rem;
-    }
+    i {font-size: 1.6rem;}
 }
+
+.fa-chevron-right {margin-left: 5px;}
+.fa-chevron-left {margin-right: 5px;}
 
 .promptSubmitForm {
     display: flex;
@@ -53,9 +53,7 @@
     justify-content: center;
     margin-top: 20px;
     height: 100%;
-    textarea {
-        margin-bottom: 20px;
-    }
+    textarea { margin-bottom: 20px; }
     button { 
         @include altButton(10px 20px, 170px)  
         align-self: center;

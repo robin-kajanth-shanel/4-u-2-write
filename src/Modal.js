@@ -5,19 +5,21 @@ import PromptSubmit from './PromptSubmit'
 class Modal extends Component {
     constructor() {
         super();
-        this.state ={
+        this.state = {
             selectedPrompt: "",
             renderPrompts: true
         }
     } 
     
+    // Sends the text of the chosen prompt to the parent component to have it displayed
     selectPrompt = (promptText) => { 
         this.props.selectPrompt(promptText)
     }
 
+    // Toggles the visibility of the prompt submission component on button click
     showForm = () => {
         this.setState({ renderPrompts: !this.state.renderPrompts })
-    }
+    } 
 
     render() {
             return (
@@ -30,9 +32,9 @@ class Modal extends Component {
                         <>
                             <div className="modalTop">
                                 <h2>Prompts Submitted by Users</h2>
-                                <button className="promptFormButton" onClick={this.showForm}>
+                                <button onClick={this.showForm}>
                                     <p>Submit a Prompt</p>
-                                    <i className="fas fa-chevron-right"></i>
+                                    <i className="fas fa-chevron-right" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <ul>
