@@ -218,30 +218,30 @@ class App extends Component {
   render() {
     return (
       <div className={`App ${this.state.theme}`}>
+        {this.state.modalOpen ? (
+          <Modal
+            closeModal={this.toggleModal}
+            selectPrompt={this.selectPrompt}
+            userPrompts={this.state.userPrompts}
+          />
+        ) : null}
+
         <Header
           lightMode={this.state.lightMode}
           toggleTheme={this.toggleTheme}
         />
 
-        <div className="description">
-          <p>The writing app that keeps you focused.</p>
-          <p>Choose your prompt. Choose your time. Start writing!</p>
-        </div>
-
         <main className="wrapper">
+          <div className="description">
+            <p>The writing app that keeps you focused.</p>
+            <p>Choose your prompt. Choose your time. Start writing!</p>
+          </div>
+
           <div className="promptSelection">
             <h2>Choose Your Prompt</h2>
             <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
             <button onClick={this.toggleModal}>Get User Prompts</button>
           </div>
-
-          {this.state.modalOpen ? (
-            <Modal
-              closeModal={this.toggleModal}
-              selectPrompt={this.selectPrompt}
-              userPrompts={this.state.userPrompts}
-            />
-          ) : null}
 
           <SelectForm
             setTimer={this.setTimer}
