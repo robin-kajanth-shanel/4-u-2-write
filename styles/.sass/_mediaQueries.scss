@@ -1,9 +1,4 @@
 /* MEDIA QUERIES */
-
-/* for tablet screens */
-@media(max-width: 768px) {
-
-}
 /* For mobile screens */
 @media(max-width: 480px) {
     h1 {font-size: 2.6rem;}
@@ -12,8 +7,7 @@
     
     .wrapper {width: 90%;}
 
-    .modalInner { 
-        padding: 30px 20px; 
+    .modalInner {  
         width: 90%;
     }
 

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import Modal from "./Modal";
 import firebase from "./firebase";
+import Header from './Header';
 import DailyPrompts from "./DailyPrompts";
 import Timer from "./Timer";
+import SelectForm from "./SelectForm"
 import Form from './Form'
 import "./styles.css";
 import { PDFViewer, PDFDownloadLink, Document, Page } from '@react-pdf/renderer';
@@ -16,7 +18,7 @@ class App extends Component {
       modalOpen: false,
       title: "",
       message: "",
-      wordCount: "",
+      wordCount: 0,
       setTime: 300000,
       elapsedTime: 300000,
       prompts: [],
@@ -31,7 +33,7 @@ class App extends Component {
       displayForm: false,
       lightMode: false,
       theme: "lightMode",
-      pdfClass: "visuallyHidden",
+      pdfClass: "hidden",
       titleComplete: "",
       messageComplete: ""
     };
@@ -60,6 +62,7 @@ class App extends Component {
     });
   };
 
+  // Sets the timer 
   setTimer = (e) => {
     e.preventDefault();
 
@@ -80,7 +83,8 @@ class App extends Component {
       if (this.state.elapsedTime === 0) {
         // Display the pop-up modal
         swal({
-          text: "Time's up! Restart the timer to continue writing"
+          title: "Time's up!",
+          text: "Restart the timer to continue writing"
         });
 
         this.setState({
@@ -103,70 +107,51 @@ class App extends Component {
   };
 
   // Saves the title input in the component state, on change
-  saveTitle = (e) => {
-    this.saveText(e, "title");
-  };
+  saveTitle = e => this.saveText(e, "title");
 
   // Saves the textarea input in the component state, on change
   saveMessage = (e) => {
     this.saveText(e, "message");
-    this.stopTime();
-    this.startTime();
+    this.setState({
+      isCountingDown: false,
+    }, () => { this.startTime() });
   };
 
   // Stops the 15 second warning timer
-  stopTime = () => {
-    this.setState({
-      isCountingDown: false,
-    });
-  };
+  stopTime = () => this.setState({ isCountingDown: false });
 
   // Starts the 15 second warning timer
-  startTime = () => {
-    this.setState({
-      isCountingDown: true,
-    });
-  };
+  startTime = () => this.setState({ isCountingDown: true });
 
+  // Displays the word count as the user types
   wordCount = () => {
     const words = this.state.message;
     const numWords = words.split(" ").filter((item) => {
       return item !== "";
     });
-    this.setState({
-      wordCount: numWords.length,
-    });
+    this.setState({ wordCount: numWords.length });
   };
 
   // Switch case for saving text inputs into the component state
   saveText = (e, typeOfText) => {
     switch (typeOfText) {
       case "title":
-        this.setState({
-          title: e.target.value,
-        });
+        this.setState({ title: e.target.value });
         break;
       case "message":
-        this.setState(
-          {
-            message: e.target.value,
-          },
+        this.setState({
+          message: e.target.value
+        },
           () => {
             this.wordCount();
-          }
-        );
+          });
         break;
       default:
-        console.log("no text state to save found");
     }
   };
 
   // Toggles the visibility of the modal
-  toggleModal = () => {
-    this.setState({
-      modalOpen: !this.state.modalOpen,
-    });
-  };
+  toggleModal = () => { this.setState({ modalOpen: !this.state.modalOpen }) };
 
   // On selecting a user generated prompt, display the selected prompt above the writing area and close the modal
   selectPrompt = (prompt) => {
@@ -179,12 +164,10 @@ class App extends Component {
 
   // Calculates the elasped writing time as a percentage of time remaining to set the width of the progress bar
   getTime = () => {
-    let percent = Math.floor(
-      (this.state.elapsedTime / this.state.setTime) * 100
-    );
-    this.setState({
-      percentTime: percent,
-    });
+    let percent = Math.floor((this.state.elapsedTime / this.state.setTime) * 100);
+
+    this.setState({ percentTime: percent });
+
     document.documentElement.style.setProperty(
       "--inner-width",
       `${this.state.percentTime}%`
@@ -193,18 +176,13 @@ class App extends Component {
 
   //Toggles the light and dark mode theme
   toggleTheme = () => {
-    this.setState({
-      lightMode: !this.state.lightMode,
-    });
+    this.setState({ lightMode: !this.state.lightMode });
+    // Toggles the font and background colours
     if (this.state.lightMode) {
-      this.setState({
-        theme: "lightMode"
-      })
+      this.setState({ theme: "lightMode" })
       document.documentElement.style.setProperty("--body-font-color", "black")
     } else {
-      this.setState({
-        theme: "darkMode"
-      });
+      this.setState({ theme: "darkMode" });
       document.documentElement.style.setProperty("--body-font-color", "white")
     }
   }
@@ -218,21 +196,21 @@ class App extends Component {
     })
   }
 
-  enableForm = () => { this.setState({ formDisable: false }) }
+  // Resets the form
+  enableForm = () => {
+    this.setState({
+      formDisable: false,
+      wordCount: 0
+    })
+  }
 
   render() {
     return (
       <div className={`App ${this.state.theme}`}>
-        <header className="wrapper">
-          <h1>Story Starter</h1>
-          <div className="toggleButton">
-            {/* <span>{this.state.lightMode ? "Dark" : "Light"} Mode</span> */}
-            <button className={this.state.lightMode ? "move" : null} onClick={this.toggleTheme}>
-              <i className="fas fa-sun"></i>
-              <i className="fas fa-moon"></i>
-            </button>
-          </div>
-        </header>
+        <Header
+          lightMode={this.state.lightMode}
+          toggleTheme={this.toggleTheme}
+        />
 
         <main className="wrapper">
           <div className="promptSelection">
@@ -240,37 +218,28 @@ class App extends Component {
             <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
             <button onClick={this.toggleModal}>Get User Prompts</button>
           </div>
-          {this.state.modalOpen ? (
+
+          {this.state.modalOpen ?
             <Modal
-              exitModal={this.toggleModal}
+              closeModal={this.toggleModal}
               selectPrompt={this.selectPrompt}
               userPrompts={this.state.userPrompts}
             />
-          ) : null}
-          <form action="" className="timeSelection" onSubmit={this.setTimer}>
-            <h2>How long do you want to write?</h2>
-            <select
-              name="intervals"
-              id="intervals"
-              onChange={this.getFormSelection}
-            >
-              <option value="300000">5 min</option>
-              <option value="600000">10 min</option>
-              <option value="1200000">20 min</option>
-              <option value="1800000">30 min</option>
-              <option value="2700000">45 min</option>
-              <option value="3600000">1 hr</option>
-            </select>
-            <button type="submit" onClick={this.startTime}>Start Timer</button>
-          </form>
+            : null}
 
-          {this.state.isCountingDown ? (
+          <SelectForm
+            setTimer={this.setTimer}
+            getFormSelection={this.getFormSelection}
+            startTime={this.startTime}
+          />
+
+          {this.state.isCountingDown ?
             <Timer
               secondsToCount="15"
               sendTime={this.getTime}
               keepChecking={this.state.keepChecking}
             />
-          ) : null}
+            : null}
 
           <div className="writingComponent">
             <h3>Selected Prompt:</h3>
@@ -293,15 +262,14 @@ class App extends Component {
             </div>
 
             {this.state.displayForm
-              ? (
-                <Form
-                  saveTitle={this.saveTitle}
-                  disableForm={this.state.formDisable}
-                  saveMessage={this.saveMessage}
-                  wordCount={this.state.wordCount}
-                  enableForm={this.enableForm}
-                />
-              )
+              ?
+              <Form
+                saveTitle={this.saveTitle}
+                disableForm={this.state.formDisable}
+                saveMessage={this.saveMessage}
+                wordCount={this.state.wordCount}
+                enableForm={this.enableForm}
+              />
               : null}
           </div>
         </main>

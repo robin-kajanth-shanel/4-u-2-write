@@ -12,9 +12,9 @@ const Form = (props) => {
                     placeholder="Title"
                     onChange={props.saveTitle}
                 />
+                <label htmlFor="writingField" className="sr-only">Writing Field</label>
                 <textarea
-                    name=""
-                    id=""
+                    id="writingField"
                     cols="30"
                     rows="10"
                     disabled={props.disableForm}

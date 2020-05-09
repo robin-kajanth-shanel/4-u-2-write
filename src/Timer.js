@@ -18,9 +18,7 @@ class Timer extends Component {
       counter: secondsToCount,
       keepChecking: this.props.keepChecking
     });
-    // this.state.keepChecking ?
     this.doIntervalChange();
-    //   clearInterval(this.myInterval);
   }
 
   doIntervalChange = () => {
@@ -30,12 +28,11 @@ class Timer extends Component {
         this.props.sendTime(this.state.counter);
         if (this.state.counter < 0) {
           clearInterval(this.myInterval);
-          this.setState({
-            counter: 0,
+          this.setState({ counter: 0 });
+          // Sweet Alerts
+          swal({
+            title: "Keep writing!"
           });
-          swal({ 
-            text: "Keep writing!"
-           });
         }
       }, 1000);
     }
@@ -51,7 +48,7 @@ class Timer extends Component {
     clearInterval(this.myInterval);
   }
 
-  render() { 
+  render() {
     return (
       <div className="visuallyHidden">
       </div>

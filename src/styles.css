@@ -390,37 +390,51 @@ textarea:focus {
 }
 
 .modalOuter {
-  padding: 100px 0;
+  background-color: rgba(0, 0, 0, 0.8);
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .modalInner {
   position: relative;
-  padding: 50px 40px;
-  background-color: white;
   color: #1a1a1a;
+  background-color: white;
+  padding: 0 40px;
   width: 80%;
   height: 80vh;
   max-width: 800px;
-  margin: 0 auto;
-  -webkit-box-shadow: 0px 0px 20px 5px #1d1d1d1a;
-          box-shadow: 0px 0px 20px 5px #1d1d1d1a;
   overflow: auto;
 }
 
 .exitButton {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 2rem;
+  background-color: transparent;
+  color: white;
+  position: fixed;
+  z-index: 1;
+  top: 25px;
+  right: 25px;
+  font-size: 3rem;
   border: none;
 }
 
 .modalTop {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  padding-top: 30px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -471,7 +485,6 @@ textarea:focus {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  margin-top: 20px;
   height: 100%;
 }
 
@@ -497,7 +510,7 @@ textarea:focus {
 li {
   text-align: center;
   background-color: whitesmoke;
-  padding: 10px;
+  padding: 20px;
   margin: 30px 0;
 }
 
@@ -506,23 +519,22 @@ li span {
 }
 
 li p {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 li button {
-  background-color: white;
   font-size: 1.6rem;
   margin: 0 auto;
-  border: 1px solid #cecece;
+  border: none;
   border-radius: 5px;
   padding: 5px 15px;
-  -webkit-box-shadow: 0px 0px 5px 5px #7c7c7c11;
-          box-shadow: 0px 0px 5px 5px #7c7c7c11;
+  color: #1a1a1a;
+  background-color: #78cad2;
 }
 
 li button:hover, li button:focus {
-  color: #78cad2;
-  border: 1px solid #78cad2;
+  color: white;
+  background-color: #23395b;
 }
 
 :root {
@@ -569,9 +581,13 @@ footer {
   text-align: center;
 }
 
+footer a {
+  border-bottom: 1px solid #1a1a1a;
+}
+
 footer a:hover,
 footer a:focus {
-  text-decoration: underline;
+  border-bottom: 1px solid transparent;
 }
 
 h1, h2, h3 {
@@ -593,13 +609,23 @@ h3 {
   text-align: center;
 }
 
+.hidden {
+  display: none;
+}
+
 .swal-text {
   text-align: center;
 }
 
 .swal-button {
   background-color: #78cad2;
+  color: #000;
   border: none;
+}
+
+.swal-button:not([disabled]):hover {
+  background-color: #23395b;
+  color: #fff;
 }
 
 .promptSelection button {
@@ -619,6 +645,13 @@ h3 {
   border-radius: 25px;
   padding: 10px 20px;
   margin: 5px 10px;
+}
+
+.promptSelection button:hover, .promptSelection button:focus,
+.timeSelection button:hover,
+.timeSelection button:focus {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
 }
 
 select {
@@ -721,7 +754,6 @@ input[type="text"]:focus {
 }
 
 /* MEDIA QUERIES */
-/* for tablet screens */
 /* For mobile screens */
 @media (max-width: 480px) {
   h1 {
@@ -734,7 +766,6 @@ input[type="text"]:focus {
     width: 90%;
   }
   .modalInner {
-    padding: 30px 20px;
     width: 90%;
   }
   .modalTop {
