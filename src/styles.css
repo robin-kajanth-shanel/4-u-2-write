@@ -391,7 +391,7 @@ textarea:focus {
 
 .modalOuter {
   background-color: rgba(0, 0, 0, 0.8);
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -409,13 +409,13 @@ textarea:focus {
 }
 
 .modalInner {
-  position: relative;
+  position: absolute;
   color: #1a1a1a;
   background-color: white;
   padding: 0 40px;
-  width: 80%;
   height: 80vh;
   max-width: 800px;
+  width: 80%;
   overflow: auto;
 }
 
@@ -486,7 +486,7 @@ textarea:focus {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  height: 90%;
+  height: 80%;
 }
 
 .promptSubmitForm textarea {
@@ -778,6 +778,7 @@ input[type="text"]:focus {
   }
   .modalInner {
     width: 90%;
+    padding: 0 20px;
   }
   .modalTop {
     -webkit-box-orient: vertical;
