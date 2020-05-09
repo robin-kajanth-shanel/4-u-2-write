@@ -567,8 +567,18 @@ header {
           justify-content: space-between;
 }
 
+.description {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.description p {
+  font-weight: 400;
+  line-height: 1.4;
+}
+
 main {
-  padding: 100px 0;
+  padding: 50px 0 100px 0;
 }
 
 footer {

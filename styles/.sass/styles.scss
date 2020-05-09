@@ -29,7 +29,17 @@ header {
     justify-content: space-between;
 }
 
-main {padding: 100px 0;} 
+.description {
+    text-align: center;
+    margin-top: 50px;
+
+    p {
+        font-weight: 400;
+        line-height: 1.4;
+    }
+}
+
+main {padding: 50px 0 100px 0;} 
 
 footer{
     position: absolute;
@@ -108,7 +118,7 @@ select {
 }
 
 button[type="reset"] {
-    @include altButton(5px, 70px)    
+    @include altButton(5px, 70px);   
         &:hover,
         &:focus { background-color: $lightblue; }
 } 

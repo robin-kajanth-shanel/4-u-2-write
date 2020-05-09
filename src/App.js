@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import Modal from "./Modal";
 import firebase from "./firebase";
-import Header from './Header';
+import Header from "./Header";
 import DailyPrompts from "./DailyPrompts";
 import Timer from "./Timer";
-import SelectForm from "./SelectForm"
-import Form from './Form'
+import SelectForm from "./SelectForm";
+import Form from "./Form";
 import "./styles.css";
-import { PDFViewer, PDFDownloadLink, Document, Page } from '@react-pdf/renderer';
-import PDFExport from './PDFExport';
+import {PDFViewer, PDFDownloadLink, Document, Page} from "@react-pdf/renderer";
+import PDFExport from "./PDFExport";
 import swal from "sweetalert";
 
 class App extends Component {
@@ -35,7 +35,7 @@ class App extends Component {
       theme: "lightMode",
       pdfClass: "hidden",
       titleComplete: "",
-      messageComplete: ""
+      messageComplete: "",
     };
   }
 
@@ -62,7 +62,7 @@ class App extends Component {
     });
   };
 
-  // Sets the timer 
+  // Sets the timer
   setTimer = (e) => {
     e.preventDefault();
 
@@ -79,12 +79,12 @@ class App extends Component {
       });
       this.getTime();
 
-      // When the timer reaches 0 
+      // When the timer reaches 0
       if (this.state.elapsedTime === 0) {
         // Display the pop-up modal
         swal({
           title: "Time's up!",
-          text: "Restart the timer to continue writing"
+          text: "Restart the timer to continue writing",
         });
 
         this.setState({
@@ -103,18 +103,23 @@ class App extends Component {
     this.setState({
       setTime: e.target.value,
       elapsedTime: e.target.value,
-    })
+    });
   };
 
   // Saves the title input in the component state, on change
-  saveTitle = e => this.saveText(e, "title");
+  saveTitle = (e) => this.saveText(e, "title");
 
   // Saves the textarea input in the component state, on change
   saveMessage = (e) => {
     this.saveText(e, "message");
-    this.setState({
-      isCountingDown: false,
-    }, () => { this.startTime() });
+    this.setState(
+      {
+        isCountingDown: false,
+      },
+      () => {
+        this.startTime();
+      }
+    );
   };
 
   // Stops the 15 second warning timer
@@ -139,19 +144,23 @@ class App extends Component {
         this.setState({ title: e.target.value });
         break;
       case "message":
-        this.setState({
-          message: e.target.value
-        },
+        this.setState(
+          {
+            message: e.target.value,
+          },
           () => {
             this.wordCount();
-          });
+          }
+        );
         break;
       default:
     }
   };
 
   // Toggles the visibility of the modal
-  toggleModal = () => { this.setState({ modalOpen: !this.state.modalOpen }) };
+  toggleModal = () => {
+    this.setState({ modalOpen: !this.state.modalOpen });
+  };
 
   // On selecting a user generated prompt, display the selected prompt above the writing area and close the modal
   selectPrompt = (prompt) => {
@@ -164,7 +173,9 @@ class App extends Component {
 
   // Calculates the elasped writing time as a percentage of time remaining to set the width of the progress bar
   getTime = () => {
-    let percent = Math.floor((this.state.elapsedTime / this.state.setTime) * 100);
+    let percent = Math.floor(
+      (this.state.elapsedTime / this.state.setTime) * 100
+    );
 
     this.setState({ percentTime: percent });
 
@@ -179,30 +190,30 @@ class App extends Component {
     this.setState({ lightMode: !this.state.lightMode });
     // Toggles the font and background colours
     if (this.state.lightMode) {
-      this.setState({ theme: "lightMode" })
-      document.documentElement.style.setProperty("--body-font-color", "black")
+      this.setState({ theme: "lightMode" });
+      document.documentElement.style.setProperty("--body-font-color", "black");
     } else {
       this.setState({ theme: "darkMode" });
-      document.documentElement.style.setProperty("--body-font-color", "white")
+      document.documentElement.style.setProperty("--body-font-color", "white");
     }
-  }
+  };
 
   // Saves the input on submit
   savePDF = () => {
     this.setState({
       titleComplete: this.state.title,
       messageComplete: this.state.message,
-      pdfClass: ""
-    })
-  }
+      pdfClass: "",
+    });
+  };
 
   // Resets the form
   enableForm = () => {
     this.setState({
       formDisable: false,
-      wordCount: 0
-    })
-  }
+      wordCount: 0,
+    });
+  };
 
   render() {
     return (
@@ -212,6 +223,11 @@ class App extends Component {
           toggleTheme={this.toggleTheme}
         />
 
+        <div className="description">
+          <p>The writing app that keeps you focused.</p>
+          <p>Choose your prompt. Choose your time. Start writing!</p>
+        </div>
+
         <main className="wrapper">
           <div className="promptSelection">
             <h2>Choose Your Prompt</h2>
@@ -219,13 +235,13 @@ class App extends Component {
             <button onClick={this.toggleModal}>Get User Prompts</button>
           </div>
 
-          {this.state.modalOpen ?
+          {this.state.modalOpen ? (
             <Modal
               closeModal={this.toggleModal}
               selectPrompt={this.selectPrompt}
               userPrompts={this.state.userPrompts}
             />
-            : null}
+          ) : null}
 
           <SelectForm
             setTimer={this.setTimer}
@@ -233,36 +249,45 @@ class App extends Component {
             startTime={this.startTime}
           />
 
-          {this.state.isCountingDown ?
+          {this.state.isCountingDown ? (
             <Timer
               secondsToCount="15"
               sendTime={this.getTime}
               keepChecking={this.state.keepChecking}
             />
-            : null}
+          ) : null}
 
           <div className="writingComponent">
             <h3>Selected Prompt:</h3>
             <p className="prompt">{this.state.selectedPrompt}</p>
 
             <div className="saveToPDF">
-              <PDFDownloadLink className={this.state.pdfClass} document={
-                <PDFExport
-                  title={this.state.titleComplete}
-                  message={this.state.messageComplete}
-                />} fileName={`${this.state.titleComplete}.pdf`}>
-                {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+              <PDFDownloadLink
+                className={this.state.pdfClass}
+                document={
+                  <PDFExport
+                    title={this.state.titleComplete}
+                    message={this.state.messageComplete}
+                  />
+                }
+                fileName={`${this.state.titleComplete}.pdf`}
+              >
+                {({ blob, url, loading, error }) =>
+                  loading ? "Loading document..." : "Download now!"
+                }
               </PDFDownloadLink>
-              {this.state.displayForm ?
-                <button type="button" onClick={this.savePDF} aria-label="Save To PDF">
+              {this.state.displayForm ? (
+                <button
+                  type="button"
+                  onClick={this.savePDF}
+                  aria-label="Save To PDF"
+                >
                   <i className="far fa-file-pdf" aria-hidden="true"></i>
                 </button>
-                : null
-              }
+              ) : null}
             </div>
 
-            {this.state.displayForm
-              ?
+            {this.state.displayForm ? (
               <Form
                 saveTitle={this.saveTitle}
                 disableForm={this.state.formDisable}
@@ -270,17 +295,20 @@ class App extends Component {
                 wordCount={this.state.wordCount}
                 enableForm={this.enableForm}
               />
-              : null}
+            ) : null}
           </div>
         </main>
 
         <footer className="wrapper">
-          <p>©2020 <a href="https://kajanthkumar.com/">Kajanth</a>, <a href="https://www.robinnong.com">Robin</a> and <a href="https://shanelbeebe.com/">Shanel</a>.</p>
+          <p>
+            ©2020 <a href="https://kajanthkumar.com/">Kajanth</a>,{" "}
+            <a href="https://www.robinnong.com">Robin</a> and{" "}
+            <a href="https://shanelbeebe.com/">Shanel</a>.
+          </p>
         </footer>
       </div>
     );
   }
 }
-
 
 export default App;
