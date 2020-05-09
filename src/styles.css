@@ -779,6 +779,7 @@ input[type="text"]:focus {
   .modalInner {
     width: 90%;
     padding: 0 20px;
+    height: 75vh;
   }
   .modalTop {
     -webkit-box-orient: vertical;
@@ -788,6 +789,10 @@ input[type="text"]:focus {
   }
   .modalTop button {
     margin-bottom: 10px;
+  }
+  .exitButton {
+    top: 10px;
+    font-size: 2.6rem;
   }
   .timeSelection {
     display: -webkit-box;
