@@ -420,14 +420,14 @@ textarea:focus {
 }
 
 .exitButton {
-  background-color: transparent;
-  color: white;
   position: fixed;
-  z-index: 1;
-  top: 25px;
-  right: 25px;
+  top: 20px;
+  right: 20px;
+  color: white;
   font-size: 3rem;
+  background-color: transparent;
   border: none;
+  z-index: 1;
 }
 
 .modalTop {
