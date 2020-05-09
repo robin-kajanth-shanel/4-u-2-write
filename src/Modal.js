@@ -20,10 +20,10 @@ class Modal extends Component {
     render() {
         return (
             <div className="modalOuter">
-                <button className="exitButton" onClick={this.props.closeModal} aria-label="Exit modal">
-                    <i className="far fa-times-circle" aria-hidden="true"></i>
-                </button>
                 <div className="modalInner">
+                    <button className="exitButton" onClick={this.props.closeModal} aria-label="Exit modal">
+                        <i className="far fa-times-circle" aria-hidden="true"></i>
+                    </button>
                     {this.state.renderPrompts ?
                         <>
                             <div className="modalTop">
