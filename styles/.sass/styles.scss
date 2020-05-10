@@ -49,7 +49,10 @@ footer{
     padding: 15px;
     font-size: 1.6rem;
     text-align: center;
-    a {border-bottom: 1px solid $black;}
+    a {
+        text-decoration: none;
+        border-bottom: 1px solid $black;
+    }
     a:hover,
     a:focus {border-bottom: 1px solid transparent;}
 }
@@ -107,7 +110,17 @@ select {
 
 .writingComponent {margin-top: 20px;} 
 
-.prompt {text-align: center;}
+.prompt {
+    text-align: center;
+    margin-bottom: 50px;
+} 
+
+.ck-editor__editable_inline {
+    min-height: 200px;
+    max-height: 80vh;
+    overflow: auto;
+    color: $black;
+}
 
 .formBottomBar {
     display: flex;
@@ -115,25 +128,12 @@ select {
     align-items: center;
     margin: 10px 0;
     font-size: 1.6rem;
-}
-
-button[type="reset"] {
-    @include altButton(5px, 70px);   
-        &:hover,
-        &:focus { background-color: $lightblue; }
 } 
 
-.saveToPDF { 
-    display: flex; 
-    align-items: center;
-    justify-content: flex-end;
-    margin: 50px 0 10px 0; 
-    button {
-        font-size: 2.4rem;
-        border: none; 
-        color: var(--body-font-color);
-        margin-left: 10px;
-    }
+.saveToPDF {   
+    font-size: 2.4rem;
+    border: none; 
+    color: var(--body-font-color);  
 }
 
 // Timer progress bar
@@ -147,13 +147,7 @@ button[type="reset"] {
     background-color: $lightblue;
     height: 100%;
     width: var(--inner-width); 
-}
-
-// Writing Form
-.writingForm {
-    display: flex;
-    flex-direction: column;
-}
+} 
 
 // Text areas for all forms
 input[type="text"] {
@@ -162,11 +156,6 @@ input[type="text"] {
     border: none;
     border-bottom: 1px solid $lightgrey;
     &:focus {border-bottom: 1px solid grey;}
-}
-
-.title { 
-    font-size: 2.2rem;
-    font-weight: 700;
-}
+} 
 
 @import 'mediaQueries';

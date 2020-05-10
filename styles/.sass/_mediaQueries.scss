@@ -37,3 +37,12 @@
 
     .timeSelection button { width: 200px; }
 }
+
+.printArea {
+    display: none;
+}
+
+@media print {  
+    .App {display: none;}
+    .printArea {display: block;}
+}

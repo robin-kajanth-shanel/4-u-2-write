@@ -1,33 +1,26 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Modal from "./Modal";
 import firebase from "./firebase";
 import Header from "./Header";
 import DailyPrompts from "./DailyPrompts";
 import Timer from "./Timer";
 import SelectForm from "./SelectForm";
-import Form from "./Form";
 import "./styles.css";
-import {PDFDownloadLink} from "@react-pdf/renderer";
-import PDFExport from "./PDFExport";
 import swal from "sweetalert";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import axios from 'axios';
-import Export from './Export';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       modalOpen: false,
-      title: "",
       message: "",
       wordCount: 0,
       setTime: 300000,
       elapsedTime: 300000,
       prompts: [],
-      selectedPrompt: "",
+      selectedPrompt: "None selected",
       userPrompts: [],
       isCountingDown: false,
       percentTime: "",
@@ -37,11 +30,11 @@ class App extends Component {
       keepChecking: true,
       displayForm: false,
       lightMode: false,
-      theme: "lightMode",
-      pdfClass: "hidden",
-      titleComplete: "",
-      messageComplete: "",
-      htmlMessage: ""
+      theme: "lightMode", 
+      htmlMessage: "",
+      configuration: {
+          toolbar: ['heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'alignment', 'blockQuote', 'link']
+      }
     };
   }
 
@@ -56,6 +49,18 @@ class App extends Component {
       }
       this.setState({ userPrompts: promptsArray });
     });
+
+    ClassicEditor
+      .create(document.querySelector('#editor'),
+        {
+          alignment: {
+            options: ['left', 'center', 'right']
+          }
+        }
+      ) 
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   // Gets the prompt of the day from the imported DailyPrompt function component
@@ -63,18 +68,14 @@ class App extends Component {
     const dailyPromptsArray = DailyPrompts();
     const today = new Date().getDate();
     const prompt = dailyPromptsArray[today - 1].dailyPrompt;
-    this.setState({
-      selectedPrompt: prompt,
-    });
+    this.setState({ selectedPrompt: prompt });
   };
 
   // Sets the timer
   setTimer = (e) => {
     e.preventDefault();
 
-    this.setState({
-      formDisable: false,
-    });
+    this.setState({ formDisable: false });
 
     // Sets the writing timer according to the user's selection
     const writingTimer = setInterval(() => {
@@ -112,20 +113,10 @@ class App extends Component {
     });
   };
 
-  // Saves the title input in the component state, on change
-  saveTitle = (e) => this.saveText(e, "title");
-
   // Saves the textarea input in the component state, on change
   saveMessage = (e) => {
     this.saveText(e, "message");
-    this.setState(
-      {
-        isCountingDown: false,
-      },
-      () => {
-        this.startTime();
-      }
-    );
+    this.setState({ isCountingDown: false }, () => { this.startTime() });
   };
 
   // Stops the 15 second warning timer
@@ -143,24 +134,9 @@ class App extends Component {
     this.setState({ wordCount: numWords.length });
   };
 
-  // Switch case for saving text inputs into the component state
-  saveText = (e, typeOfText) => {
-    switch (typeOfText) {
-      case "title":
-        this.setState({ title: e.target.value });
-        break;
-      case "message":
-        this.setState(
-          {
-            message: e.target.value,
-          },
-          () => {
-            this.wordCount();
-          }
-        );
-        break;
-      default:
-    }
+  // Saves text input into the component state and updates the word count
+  saveText = (e) => {
+    this.setState({ message: e.target.value }, () => { this.wordCount() }); 
   };
 
   // Toggles the visibility of the modal
@@ -204,15 +180,6 @@ class App extends Component {
     }
   };
 
-  // Saves the input on submit
-  savePDF = () => {
-    this.setState({
-      titleComplete: this.state.title,
-      messageComplete: this.state.message,
-      pdfClass: "",
-    });
-  };
-
   // Resets the form
   enableForm = () => {
     this.setState({
@@ -222,7 +189,7 @@ class App extends Component {
   };
 
   getPlainText(text) {
-    return text.replace(/<[^>]*>/g, '');;
+    return text.replace(/<[^>]*>/g, '');
   }
 
   handleEditorChange = (e, editor) => { 
@@ -231,42 +198,24 @@ class App extends Component {
       htmlMessage: editor.getData(),
       message: text,
       isCountingDown: false
-    }, () => { 
-      this.startTime();
-    }
+      }, () => {
+        this.wordCount(); 
+        this.startTime();
+      }
     );
   }
 
-  pdflayer = () => {
-    const apiKey = 'b99c095367b4eea1ff3208b8aac4b1a0';
-    const pdfURL = `http://api.pdflayer.com/api/convert`;
-
-    axios({
-      method: `POST`,
-      'Content-Type': 'application/json',
-      url: pdfURL,
-      encoding: null,
-      responseType: 'blob',
-      params: {
-        document_name: 'pdflayer.pdf',
-        access_key: apiKey,
-        document_url: "https://robin-kajanth-shanel.github.io/4-u-2-write/exportpdf",
-      }
-    }).then((response) => {
-      //download the incoming pdf copied from https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'file.pdf');
-      document.body.appendChild(link);
-      link.click();
-    });
+  printWindow = () => {
+    const printArea = document.querySelector('.printArea') 
+    printArea.innerHTML = this.state.htmlMessage 
+    window.print();
   }
 
   render() {
     return (
-      <Router>
-        <Route exact path="/exportpdf" component={Export} title={this.state.titleComplete} text={this.state.htmlMessage}/> 
+      <>
+        <div className="printArea">
+        </div>
         <div className={`App ${this.state.theme}`}>
           {this.state.modalOpen ? (
             <Modal
@@ -311,60 +260,35 @@ class App extends Component {
               <h3>Selected Prompt:</h3>
               <p className="prompt">{this.state.selectedPrompt}</p>
 
-              <div className="saveToPDF">
-                <PDFDownloadLink
-                  className={this.state.pdfClass}
-                  document={
-                    <PDFExport
-                      title={this.state.titleComplete}
-                      message={this.state.messageComplete}
-                    />
-                  }
-                  fileName={`${this.state.titleComplete}.pdf`}
-                >
-                  {({ blob, url, loading, error }) =>
-                    loading ? "Loading document..." : "Download now!"
-                  }
-                </PDFDownloadLink>
-                {this.state.displayForm ? (
-                  <button
-                    type="button"
-                    onClick={this.savePDF}
-                    aria-label="Save To PDF"
-                  >
-                    <i className="far fa-file-pdf" aria-hidden="true"></i>
-                  </button>
-                ) : null}
-              </div>
-              
-              <CKEditor
-                editor={ClassicEditor}
-                disabled={this.state.formDisable ? true : false}
-                onChange={this.handleEditorChange}
-              />
-              <button onClick={this.pdflayer}>export</button>
               {this.state.displayForm ? (
-                <Form
-                  saveTitle={this.saveTitle}
-                  disableForm={this.state.formDisable}
-                  saveMessage={this.saveMessage}
-                  wordCount={this.state.wordCount}
-                  enableForm={this.enableForm}
-                />
+                <>
+                  <CKEditor
+                    config={this.state.configuration}
+                    editor={ClassicEditor}
+                    disabled={this.state.formDisable ? true : false}
+                    onChange={this.handleEditorChange}
+                  />
+                  <div className="outer">
+                    <div className="inner"></div>
+                  </div>
+                  <div className="formBottomBar">
+                    <p>Word Count: {this.state.wordCount}</p>
+                    <button className="saveToPDF" onClick={this.printWindow} aria-label="Save To PDF">
+                        <i className="far fa-file-pdf" aria-hidden="true"></i> 
+                    </button> 
+                  </div>
+                </>
               ) : null}
             </div>
           </main>
 
           <footer className="wrapper">
             <p>
-              ©2020 <a href="https://kajanthkumar.com/">Kajanth</a>,{" "}
-              <a href="https://www.robinnong.com">Robin</a> and{" "}
-              <a href="https://shanelbeebe.com/">Shanel</a>.
+              ©2020 <a href="https://kajanthkumar.com/">Kajanth</a>, <a href="https://www.robinnong.com">Robin</a> and <a href="https://shanelbeebe.com/">Shanel</a>. Daily prompts provided by <a href="https://thestoryshack.com/">StoryShack</a>.
             </p>
           </footer>
         </div>
-      </Router>
-
+      </>
     );
   }
 }
