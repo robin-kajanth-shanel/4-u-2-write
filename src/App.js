@@ -6,8 +6,14 @@ import DailyPrompts from "./DailyPrompts";
 import Timer from "./Timer";
 import SelectForm from "./SelectForm";
 import Form from "./Form";
+import Editor from "./Editor";
 import "./styles.css";
-import {PDFViewer, PDFDownloadLink, Document, Page} from "@react-pdf/renderer";
+import {
+  PDFViewer,
+  PDFDownloadLink,
+  Document,
+  Page,
+} from "@react-pdf/renderer";
 import PDFExport from "./PDFExport";
 import swal from "sweetalert";
 
@@ -261,7 +267,7 @@ class App extends Component {
             <h3>Selected Prompt:</h3>
             <p className="prompt">{this.state.selectedPrompt}</p>
 
-            <div className="saveToPDF">
+            {/* <div className="saveToPDF">
               <PDFDownloadLink
                 className={this.state.pdfClass}
                 document={
@@ -285,9 +291,18 @@ class App extends Component {
                   <i className="far fa-file-pdf" aria-hidden="true"></i>
                 </button>
               ) : null}
-            </div>
+            </div> */}
 
-            {this.state.displayForm ? (
+            <Editor
+              wordCount={this.wordCount}
+              howManyWords={this.state.wordCount}
+              isCountingDown={this.state.isCountingDown}
+              saveTitle={this.saveTitle}
+              stopTime={this.stopTime}
+              startTime={this.startTime}
+              displayForm={this.state.displayForm}
+            />
+            {/* {this.state.displayForm ? (
               <Form
                 saveTitle={this.saveTitle}
                 disableForm={this.state.formDisable}
@@ -295,7 +310,7 @@ class App extends Component {
                 wordCount={this.state.wordCount}
                 enableForm={this.enableForm}
               />
-            ) : null}
+            ) : null} */}
           </div>
         </main>
 
