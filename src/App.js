@@ -12,10 +12,11 @@ import 'react-quill/dist/quill.snow.css';
 import RichTextEditor from './RichTextEditor'
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import html2pdf from 'html2pdf.js';
-window.html2canvas = html2canvas;
+import axios from 'axios';
+// window.html2canvas = html2canvas;
 
 
 
@@ -258,7 +259,7 @@ class App extends Component {
   handleEditorChange = (e, editor) => {
     const text = this.getPlainText(editor.getData());
       this.setState({ 
-        // htmlMessage: editor.getData(),
+        htmlMessage: editor.getData(),
         message: text
       }, () => {
           this.stopTime();
@@ -270,19 +271,27 @@ class App extends Component {
 
   // copied from https://stackoverflow.com/questions/12895795/getting-non-html-text-from-ckeditor
   getPlainText(text) {
+    // console.log(text);
     return text.replace(/<[^>]*>/g, '');;
-    console.log(text);
 }
 
   savejsPDF = () => {
+
+    // attempt 1
+
     // let doc = new jsPDF('p', 'pt', 'a4');
-    let elementHTML = this.state.htmlMessage;
-    const div = document.getElementById('hidden');
-    console.log(div);
-    div.insertAdjacentHTML('beforeend', elementHTML);
-    // doc.addHTML( elementHTML, function() {
+    // doc.setFontSize(18);
+    // let elementHTML = this.state.htmlMessage;
+    // const div = document.getElementById('hidden');
+    // div.insertAdjacentHTML('beforeend', elementHTML);
+    // console.log(div);
+    // doc.addHTML( div, function() {
     //   doc.save(`${this.state.title}JSPDF.pdf`);
     // });
+
+
+    // attempt2
+
 
     // const filename = `${this.state.title}JSPDF.pdf`;
 
@@ -297,8 +306,127 @@ class App extends Component {
     //   pdf.save('filename.pdf');
     // // });
     // let element = document.getElementById('element-to-print');
-    var element = document.getElementById('hidden');
-    html2pdf(element);
+    // var element = document.getElementById('hidden');
+    // html2pdf(element);
+
+
+    // attempt 3
+
+
+    
+
+
+  }
+
+  //only 30 api requests allowed per hour
+  sejdaCall = () => {
+    console.log("sejda CALLED");
+    const apikey = 'api_E8E31975EC4D4AC9AF6AA05EBB6730E7';
+    const corsenabledApiKey = 'api_public_30b85e8b214d4bbd81875c376a043811';
+    const apikeynoline = `E8E31975EC4D4AC9AF6AA05EBB6730E7`;
+    const corsenabledApiKeynoline = '30b85e8b214d4bbd81875c376a043811';
+
+    axios({
+      method: `POST`,
+      'Content-Type': 'application/json',
+      url: "https://api.sejda.com/v2/html-pdf",
+      params: {
+        filename: 'out.pdf',
+        pageSize: 'a4',
+        publishableKey: corsenabledApiKey,
+        htmlcode: encodeURIComponent(this.state.htmlMessage)
+      }
+      }).then(() => {
+        
+      });
+    
+  }
+
+  savehtml2pdf = () => {
+    let elementHTML = this.state.htmlMessage;
+    const div = document.getElementById('hidden');
+    div.insertAdjacentHTML('beforeend', elementHTML);
+      const options = {
+        filename: 'output.pdf',
+        image: { type: 'jpeg'},
+        html2canvas:{},
+        jsPDF:{orientation: 'landscape'}
+      }
+    console.log(div);
+
+    html2pdf().from(div).set(options).save();
+  }
+
+
+  pdflayer = () => {
+
+    const apiKey = 'b99c095367b4eea1ff3208b8aac4b1a0';
+    const pdfURL = `http://api.pdflayer.com/api/convert`;
+    const htmlData = this.state.htmlMessage;
+    // const BASE_URL = 'http://api.pdflayer.com/api/convert?access_key=' + apiKey+ '&document_html=' + htmlData;
+
+    axios({
+      method: `POST`,
+      'Content-Type': 'application/json',
+      url: pdfURL,
+      encoding: null,
+      responseType: 'blob',
+      params: {
+        document_name: 'pdflayer.pdf',
+        access_key: apiKey,
+        document_url: "https://kajanthkumar.com/",
+      }
+    }).then((response) => {
+      //download the incoming pdf copied from https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'file.pdf');
+      document.body.appendChild(link);
+      link.click();
+    });
+
+
+
+    // let config = require('./../config');
+    // let request = require('request');
+    // let ACCESS_KEY = '?access_key=' + config.pdflayer_acccess_key;
+    // const BASE_URL = 'http://api.pdflayer.com/api/convert?access_key='+ apiKey;
+    // const API_URL = BASE_URL + ACCESS_KEY;
+
+    // let formData = {
+    //         document_html: this.state.htmlMessage
+    //     }
+
+    // axios.post({ url: BASE_URL, formData: formData, encoding: null}, function optionalCallback(err, httpResponse, body) {
+    //         if (err) {
+    //             console.log(err);
+    //         } else {
+    //           // Here you can save the file or do anything else with it
+    //             console.log(body);
+    //         }
+    //     });
+  }
+
+  htmlRocket = () => {
+    const url = "http://api.html2pdfrocket.com/pdf";
+    const apiKey = `0632e472-7bd4-4d36-bad9-01d6509a662b`;
+
+    const htmlToSend = encodeURIComponent(this.state.htmlMessage);
+    const data = "apikey=" + apiKey + "&value=" + htmlToSend;
+
+    axios({
+      method: `POST`,
+      'Content-Type': 'application/json',
+      url: url,
+      document_html: encodeURIComponent(this.state.htmlMessage),
+      responseType: 'blob',
+      params: {
+        data: data
+      }
+    }).then((res) => {
+
+    });
   }
 
   render() {
@@ -361,6 +489,9 @@ class App extends Component {
               </p>
             </div>
             <button onClick={this.savejsPDF}>JSPDF</button>
+            <button onClick={this.savehtml2pdf}>html2pdf</button>
+            <button onClick={this.sejdaCall}>sejdaCall</button>
+            <button onClick={this.pdflayer}>PDFlayer</button>
             <div id="hidden"></div>
             <div className="saveToPDF">
               <PDFDownloadLink className={this.state.pdfClass} document={
