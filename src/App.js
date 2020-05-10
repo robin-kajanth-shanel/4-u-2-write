@@ -7,9 +7,12 @@ import Timer from "./Timer";
 import SelectForm from "./SelectForm";
 import Form from "./Form";
 import "./styles.css";
-import {PDFViewer, PDFDownloadLink, Document, Page} from "@react-pdf/renderer";
+import {PDFDownloadLink} from "@react-pdf/renderer";
 import PDFExport from "./PDFExport";
 import swal from "sweetalert";
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import axios from 'axios';
 
 class App extends Component {
   constructor() {
@@ -36,6 +39,7 @@ class App extends Component {
       pdfClass: "hidden",
       titleComplete: "",
       messageComplete: "",
+      htmlMessage: ""
     };
   }
 
@@ -215,6 +219,42 @@ class App extends Component {
     });
   };
 
+  handleEditorChange = (e, editor) => { 
+    this.setState({
+      htmlMessage: editor.getData() 
+    }, () => {
+      this.stopTime();
+      this.startTime();
+    }
+    );
+  }
+
+  pdflayer = () => {
+    const apiKey = 'b99c095367b4eea1ff3208b8aac4b1a0';
+    const pdfURL = `http://api.pdflayer.com/api/convert`;
+
+    axios({
+      method: `POST`,
+      'Content-Type': 'application/json',
+      url: pdfURL,
+      encoding: null,
+      responseType: 'blob',
+      params: {
+        document_name: 'pdflayer.pdf',
+        access_key: apiKey,
+        document_url: "https://kajanthkumar.com/",
+      }
+    }).then((response) => {
+      //download the incoming pdf copied from https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'file.pdf');
+      document.body.appendChild(link);
+      link.click();
+    });
+  }
+
   render() {
     return (
       <div className={`App ${this.state.theme}`}>
@@ -249,13 +289,13 @@ class App extends Component {
             startTime={this.startTime}
           />
 
-          {this.state.isCountingDown ? (
+          {this.state.isCountingDown ? 
             <Timer
               secondsToCount="15"
               sendTime={this.getTime}
               keepChecking={this.state.keepChecking}
             />
-          ) : null}
+          : null}
 
           <div className="writingComponent">
             <h3>Selected Prompt:</h3>
@@ -286,6 +326,12 @@ class App extends Component {
                 </button>
               ) : null}
             </div>
+            
+            <CKEditor
+              editor={ClassicEditor}
+              disabled={this.state.formDisable ? true : false}
+              onChange={this.handleEditorChange}
+            />
 
             {this.state.displayForm ? (
               <Form
