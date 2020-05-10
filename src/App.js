@@ -5,24 +5,22 @@ import Header from "./Header";
 import DailyPrompts from "./DailyPrompts";
 import Timer from "./Timer";
 import SelectForm from "./SelectForm";
-import Form from "./Form";
 import "./styles.css";
-import {PDFViewer, PDFDownloadLink, Document, Page} from "@react-pdf/renderer";
-import PDFExport from "./PDFExport";
 import swal from "sweetalert";
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       modalOpen: false,
-      title: "",
       message: "",
       wordCount: 0,
       setTime: 300000,
       elapsedTime: 300000,
       prompts: [],
-      selectedPrompt: "",
+      selectedPrompt: "None selected",
       userPrompts: [],
       isCountingDown: false,
       percentTime: "",
@@ -32,10 +30,11 @@ class App extends Component {
       keepChecking: true,
       displayForm: false,
       lightMode: false,
-      theme: "lightMode",
-      pdfClass: "hidden",
-      titleComplete: "",
-      messageComplete: "",
+      theme: "lightMode", 
+      htmlMessage: "",
+      configuration: {
+          toolbar: ['heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'alignment', 'blockQuote', 'link']
+      }
     };
   }
 
@@ -50,6 +49,18 @@ class App extends Component {
       }
       this.setState({ userPrompts: promptsArray });
     });
+
+    ClassicEditor
+      .create(document.querySelector('#editor'),
+        {
+          alignment: {
+            options: ['left', 'center', 'right']
+          }
+        }
+      ) 
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   // Gets the prompt of the day from the imported DailyPrompt function component
@@ -57,18 +68,14 @@ class App extends Component {
     const dailyPromptsArray = DailyPrompts();
     const today = new Date().getDate();
     const prompt = dailyPromptsArray[today - 1].dailyPrompt;
-    this.setState({
-      selectedPrompt: prompt,
-    });
+    this.setState({ selectedPrompt: prompt });
   };
 
   // Sets the timer
   setTimer = (e) => {
     e.preventDefault();
 
-    this.setState({
-      formDisable: false,
-    });
+    this.setState({ formDisable: false });
 
     // Sets the writing timer according to the user's selection
     const writingTimer = setInterval(() => {
@@ -106,20 +113,10 @@ class App extends Component {
     });
   };
 
-  // Saves the title input in the component state, on change
-  saveTitle = (e) => this.saveText(e, "title");
-
   // Saves the textarea input in the component state, on change
   saveMessage = (e) => {
     this.saveText(e, "message");
-    this.setState(
-      {
-        isCountingDown: false,
-      },
-      () => {
-        this.startTime();
-      }
-    );
+    this.setState({ isCountingDown: false }, () => { this.startTime() });
   };
 
   // Stops the 15 second warning timer
@@ -137,24 +134,9 @@ class App extends Component {
     this.setState({ wordCount: numWords.length });
   };
 
-  // Switch case for saving text inputs into the component state
-  saveText = (e, typeOfText) => {
-    switch (typeOfText) {
-      case "title":
-        this.setState({ title: e.target.value });
-        break;
-      case "message":
-        this.setState(
-          {
-            message: e.target.value,
-          },
-          () => {
-            this.wordCount();
-          }
-        );
-        break;
-      default:
-    }
+  // Saves text input into the component state and updates the word count
+  saveText = (e) => {
+    this.setState({ message: e.target.value }, () => { this.wordCount() }); 
   };
 
   // Toggles the visibility of the modal
@@ -198,15 +180,6 @@ class App extends Component {
     }
   };
 
-  // Saves the input on submit
-  savePDF = () => {
-    this.setState({
-      titleComplete: this.state.title,
-      messageComplete: this.state.message,
-      pdfClass: "",
-    });
-  };
-
   // Resets the form
   enableForm = () => {
     this.setState({
@@ -215,98 +188,107 @@ class App extends Component {
     });
   };
 
+  getPlainText(text) {
+    return text.replace(/<[^>]*>/g, '');
+  }
+
+  handleEditorChange = (e, editor) => { 
+    const text = this.getPlainText(editor.getData());
+    this.setState({
+      htmlMessage: editor.getData(),
+      message: text,
+      isCountingDown: false
+      }, () => {
+        this.wordCount(); 
+        this.startTime();
+      }
+    );
+  }
+
+  printWindow = () => {
+    const printArea = document.querySelector('.printArea') 
+    printArea.innerHTML = this.state.htmlMessage 
+    window.print();
+  }
+
   render() {
     return (
-      <div className={`App ${this.state.theme}`}>
-        {this.state.modalOpen ? (
-          <Modal
-            closeModal={this.toggleModal}
-            selectPrompt={this.selectPrompt}
-            userPrompts={this.state.userPrompts}
-          />
-        ) : null}
-
-        <Header
-          lightMode={this.state.lightMode}
-          toggleTheme={this.toggleTheme}
-        />
-
-        <main className="wrapper">
-          <div className="description">
-            <p>The writing app that keeps you focused.</p>
-            <p>Choose your prompt. Choose your time. Start writing!</p>
-          </div>
-
-          <div className="promptSelection">
-            <h2>Choose Your Prompt</h2>
-            <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
-            <button onClick={this.toggleModal}>Get User Prompts</button>
-          </div>
-
-          <SelectForm
-            setTimer={this.setTimer}
-            getFormSelection={this.getFormSelection}
-            startTime={this.startTime}
-          />
-
-          {this.state.isCountingDown ? (
-            <Timer
-              secondsToCount="15"
-              sendTime={this.getTime}
-              keepChecking={this.state.keepChecking}
+      <>
+        <div className="printArea">
+        </div>
+        <div className={`App ${this.state.theme}`}>
+          {this.state.modalOpen ? (
+            <Modal
+              closeModal={this.toggleModal}
+              selectPrompt={this.selectPrompt}
+              userPrompts={this.state.userPrompts}
             />
           ) : null}
 
-          <div className="writingComponent">
-            <h3>Selected Prompt:</h3>
-            <p className="prompt">{this.state.selectedPrompt}</p>
+          <Header
+            lightMode={this.state.lightMode}
+            toggleTheme={this.toggleTheme}
+          />
 
-            <div className="saveToPDF">
-              <PDFDownloadLink
-                className={this.state.pdfClass}
-                document={
-                  <PDFExport
-                    title={this.state.titleComplete}
-                    message={this.state.messageComplete}
-                  />
-                }
-                fileName={`${this.state.titleComplete}.pdf`}
-              >
-                {({ blob, url, loading, error }) =>
-                  loading ? "Loading document..." : "Download now!"
-                }
-              </PDFDownloadLink>
-              {this.state.displayForm ? (
-                <button
-                  type="button"
-                  onClick={this.savePDF}
-                  aria-label="Save To PDF"
-                >
-                  <i className="far fa-file-pdf" aria-hidden="true"></i>
-                </button>
-              ) : null}
+          <main className="wrapper">
+            <div className="description">
+              <p>The writing app that keeps you focused.</p>
+              <p>Choose your prompt. Choose your time. Start writing!</p>
             </div>
 
-            {this.state.displayForm ? (
-              <Form
-                saveTitle={this.saveTitle}
-                disableForm={this.state.formDisable}
-                saveMessage={this.saveMessage}
-                wordCount={this.state.wordCount}
-                enableForm={this.enableForm}
-              />
-            ) : null}
-          </div>
-        </main>
+            <div className="promptSelection">
+              <h2>Choose Your Prompt</h2>
+              <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
+              <button onClick={this.toggleModal}>Get User Prompts</button>
+            </div>
 
-        <footer className="wrapper">
-          <p>
-            ©2020 <a href="https://kajanthkumar.com/">Kajanth</a>,{" "}
-            <a href="https://www.robinnong.com">Robin</a> and{" "}
-            <a href="https://shanelbeebe.com/">Shanel</a>.
-          </p>
-        </footer>
-      </div>
+            <SelectForm
+              setTimer={this.setTimer}
+              getFormSelection={this.getFormSelection}
+              startTime={this.startTime}
+            />
+
+            {this.state.isCountingDown ? 
+              <Timer
+                secondsToCount="15"
+                sendTime={this.getTime}
+                keepChecking={this.state.keepChecking}
+              />
+            : null}
+
+            <div className="writingComponent">
+              <h3>Selected Prompt:</h3>
+              <p className="prompt">{this.state.selectedPrompt}</p>
+
+              {this.state.displayForm ? (
+                <>
+                  <CKEditor
+                    config={this.state.configuration}
+                    editor={ClassicEditor}
+                    disabled={this.state.formDisable ? true : false}
+                    onChange={this.handleEditorChange}
+                  />
+                  <div className="outer">
+                    <div className="inner"></div>
+                  </div>
+                  <div className="formBottomBar">
+                    <p>Word Count: {this.state.wordCount}</p>
+                    <button className="saveToPDF" onClick={this.printWindow} aria-label="Save To PDF">
+                        <i className="far fa-file-pdf" aria-hidden="true"></i> 
+                    </button> 
+                  </div>
+                </>
+              ) : null}
+            </div>
+          </main>
+
+          <footer className="wrapper">
+            <p>
+              ©2020 <a href="https://kajanthkumar.com/">Kajanth</a>, <a href="https://www.robinnong.com">Robin</a> and <a href="https://shanelbeebe.com/">Shanel</a>. Daily prompts provided by <a href="https://thestoryshack.com/">StoryShack</a>.
+            </p>
+          </footer>
+        </div>
+      </>
     );
   }
 }

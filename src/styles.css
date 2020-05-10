@@ -276,16 +276,14 @@ p {
   padding: 0;
 }
 
-/* removes list style bullets */
-li {
-  list-style: none;
-}
-
 a {
-  text-decoration: none;
   color: inherit;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
+}
+
+li {
+  list-style-position: inside;
 }
 
 img {
@@ -419,6 +417,37 @@ textarea:focus {
   overflow: auto;
 }
 
+.modalInner li {
+  list-style: none;
+  text-align: center;
+  background-color: whitesmoke;
+  padding: 20px;
+  margin: 30px 0;
+}
+
+.modalInner li span {
+  color: grey;
+}
+
+.modalInner li p {
+  margin-bottom: 20px;
+}
+
+.modalInner li button {
+  font-size: 1.6rem;
+  margin: 0 auto;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 15px;
+  color: #1a1a1a;
+  background-color: #78cad2;
+}
+
+.modalInner li button:hover, .modalInner li button:focus {
+  color: white;
+  background-color: #23395b;
+}
+
 .exitButton {
   position: fixed;
   top: 20px;
@@ -508,36 +537,6 @@ textarea:focus {
   background-color: #78cad2;
 }
 
-li {
-  text-align: center;
-  background-color: whitesmoke;
-  padding: 20px;
-  margin: 30px 0;
-}
-
-li span {
-  color: grey;
-}
-
-li p {
-  margin-bottom: 20px;
-}
-
-li button {
-  font-size: 1.6rem;
-  margin: 0 auto;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 15px;
-  color: #1a1a1a;
-  background-color: #78cad2;
-}
-
-li button:hover, li button:focus {
-  color: white;
-  background-color: #23395b;
-}
-
 :root {
   --inner-width: 100%;
   --body-font-color: $black;
@@ -593,6 +592,7 @@ footer {
 }
 
 footer a {
+  text-decoration: none;
   border-bottom: 1px solid #1a1a1a;
 }
 
@@ -678,6 +678,14 @@ select {
 
 .prompt {
   text-align: center;
+  margin-bottom: 50px;
+}
+
+.ck-editor__editable_inline {
+  min-height: 200px;
+  max-height: 80vh;
+  overflow: auto;
+  color: #1a1a1a;
 }
 
 .formBottomBar {
@@ -694,36 +702,10 @@ select {
   font-size: 1.6rem;
 }
 
-button[type="reset"] {
-  color: inherit;
-  border: 2px solid #78cad2;
-  border-radius: 25px;
-  padding: 5px;
-  width: 70px;
-}
-
-button[type="reset"]:hover, button[type="reset"]:focus {
-  background-color: #78cad2;
-}
-
 .saveToPDF {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  margin: 50px 0 10px 0;
-}
-
-.saveToPDF button {
   font-size: 2.4rem;
   border: none;
   color: var(--body-font-color);
-  margin-left: 10px;
 }
 
 .outer {
@@ -738,16 +720,6 @@ button[type="reset"]:hover, button[type="reset"]:focus {
   width: var(--inner-width);
 }
 
-.writingForm {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-}
-
 input[type="text"] {
   width: 50%;
   padding: 5px 10px;
@@ -757,11 +729,6 @@ input[type="text"] {
 
 input[type="text"]:focus {
   border-bottom: 1px solid grey;
-}
-
-.title {
-  font-size: 2.2rem;
-  font-weight: 700;
 }
 
 /* MEDIA QUERIES */
@@ -813,5 +780,18 @@ input[type="text"]:focus {
   }
   .timeSelection button {
     width: 200px;
+  }
+}
+
+.printArea {
+  display: none;
+}
+
+@media print {
+  .App {
+    display: none;
+  }
+  .printArea {
+    display: block;
   }
 }

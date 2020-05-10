@@ -1,10 +1,11 @@
 {
-  "homepage": "https://robin-kajanth-shanel.github.io/4-u-2-write",
+  "homepage": "https://robin-kajanth-shanel.github.io/storystarter",
   "name": "story-starter",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-pdf/renderer": "^1.6.8",
+    "@ckeditor/ckeditor5-build-classic": "^19.0.0",
+    "@ckeditor/ckeditor5-react": "^2.1.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",

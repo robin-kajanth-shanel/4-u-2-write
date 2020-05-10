@@ -21,6 +21,33 @@
     max-width: 800px;  
     width: 80%;
     overflow: auto;
+
+    li { 
+    list-style: none;
+    text-align: center;
+    background-color: rgb(245, 245, 245); 
+    padding: 20px; 
+    margin: 30px 0;
+    span { 
+        color: grey;
+    }
+    p {margin-bottom: 20px;}
+    button {
+        font-size: 1.6rem; 
+        margin: 0 auto; 
+        border: none;
+        border-radius: 5px;
+        padding: 5px 15px; 
+        color: $black;
+        background-color: $lightblue;
+        &:hover,
+        &:focus {
+            color: white;
+            background-color: $darkblue;
+        }
+    }
+}
+
 }
 
 .exitButton {
@@ -70,27 +97,3 @@
     }
 }   
 
-li { 
-    text-align: center;
-    background-color: rgb(245, 245, 245); 
-    padding: 20px; 
-    margin: 30px 0;
-    span { 
-        color: grey;
-    }
-    p {margin-bottom: 20px;}
-    button {
-        font-size: 1.6rem; 
-        margin: 0 auto; 
-        border: none;
-        border-radius: 5px;
-        padding: 5px 15px; 
-        color: $black;
-        background-color: $lightblue;
-        &:hover,
-        &:focus {
-            color: white;
-            background-color: $darkblue;
-        }
-    }
-}

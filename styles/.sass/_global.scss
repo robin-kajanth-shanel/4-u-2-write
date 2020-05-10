@@ -25,13 +25,13 @@ p {
     padding: 0;
 }
 
-/* removes list style bullets */
-li {list-style: none;}
-
-a {
-    text-decoration: none;
+a { 
     color: inherit;
     transition: all 0.3s; 
+}
+
+li {
+    list-style-position: inside;
 }
 
 img {display: block;}
