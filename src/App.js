@@ -219,11 +219,17 @@ class App extends Component {
     });
   };
 
+  getPlainText(text) {
+    return text.replace(/<[^>]*>/g, '');;
+  }
+
   handleEditorChange = (e, editor) => { 
+    const text = this.getPlainText(editor.getData());
     this.setState({
-      htmlMessage: editor.getData() 
-    }, () => {
-      this.stopTime();
+      htmlMessage: editor.getData(),
+      message: text,
+      isCountingDown: false
+    }, () => { 
       this.startTime();
     }
     );
