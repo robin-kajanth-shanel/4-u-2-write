@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Modal from "./Modal";
 import firebase from "./firebase";
 import Header from "./Header";
@@ -13,6 +14,7 @@ import swal from "sweetalert";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
+import Export from './Export';
 
 class App extends Component {
   constructor() {
@@ -248,7 +250,7 @@ class App extends Component {
       params: {
         document_name: 'pdflayer.pdf',
         access_key: apiKey,
-        document_url: "https://kajanthkumar.com/",
+        document_url: "https://robin-kajanth-shanel.github.io/4-u-2-write/exportpdf",
       }
     }).then((response) => {
       //download the incoming pdf copied from https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
@@ -263,102 +265,106 @@ class App extends Component {
 
   render() {
     return (
-      <div className={`App ${this.state.theme}`}>
-        {this.state.modalOpen ? (
-          <Modal
-            closeModal={this.toggleModal}
-            selectPrompt={this.selectPrompt}
-            userPrompts={this.state.userPrompts}
-          />
-        ) : null}
-
-        <Header
-          lightMode={this.state.lightMode}
-          toggleTheme={this.toggleTheme}
-        />
-
-        <main className="wrapper">
-          <div className="description">
-            <p>The writing app that keeps you focused.</p>
-            <p>Choose your prompt. Choose your time. Start writing!</p>
-          </div>
-
-          <div className="promptSelection">
-            <h2>Choose Your Prompt</h2>
-            <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
-            <button onClick={this.toggleModal}>Get User Prompts</button>
-          </div>
-
-          <SelectForm
-            setTimer={this.setTimer}
-            getFormSelection={this.getFormSelection}
-            startTime={this.startTime}
-          />
-
-          {this.state.isCountingDown ? 
-            <Timer
-              secondsToCount="15"
-              sendTime={this.getTime}
-              keepChecking={this.state.keepChecking}
+      <Router>
+        <Route exact path="/exportpdf" component={Export} title={this.state.titleComplete} text={this.state.htmlMessage}/> 
+        <div className={`App ${this.state.theme}`}>
+          {this.state.modalOpen ? (
+            <Modal
+              closeModal={this.toggleModal}
+              selectPrompt={this.selectPrompt}
+              userPrompts={this.state.userPrompts}
             />
-          : null}
+          ) : null}
 
-          <div className="writingComponent">
-            <h3>Selected Prompt:</h3>
-            <p className="prompt">{this.state.selectedPrompt}</p>
+          <Header
+            lightMode={this.state.lightMode}
+            toggleTheme={this.toggleTheme}
+          />
 
-            <div className="saveToPDF">
-              <PDFDownloadLink
-                className={this.state.pdfClass}
-                document={
-                  <PDFExport
-                    title={this.state.titleComplete}
-                    message={this.state.messageComplete}
-                  />
-                }
-                fileName={`${this.state.titleComplete}.pdf`}
-              >
-                {({ blob, url, loading, error }) =>
-                  loading ? "Loading document..." : "Download now!"
-                }
-              </PDFDownloadLink>
-              {this.state.displayForm ? (
-                <button
-                  type="button"
-                  onClick={this.savePDF}
-                  aria-label="Save To PDF"
+          <main className="wrapper">
+            <div className="description">
+              <p>The writing app that keeps you focused.</p>
+              <p>Choose your prompt. Choose your time. Start writing!</p>
+            </div>
+
+            <div className="promptSelection">
+              <h2>Choose Your Prompt</h2>
+              <button onClick={this.getDailyPrompt}>Get Daily Prompt</button>
+              <button onClick={this.toggleModal}>Get User Prompts</button>
+            </div>
+
+            <SelectForm
+              setTimer={this.setTimer}
+              getFormSelection={this.getFormSelection}
+              startTime={this.startTime}
+            />
+
+            {this.state.isCountingDown ? 
+              <Timer
+                secondsToCount="15"
+                sendTime={this.getTime}
+                keepChecking={this.state.keepChecking}
+              />
+            : null}
+
+            <div className="writingComponent">
+              <h3>Selected Prompt:</h3>
+              <p className="prompt">{this.state.selectedPrompt}</p>
+
+              <div className="saveToPDF">
+                <PDFDownloadLink
+                  className={this.state.pdfClass}
+                  document={
+                    <PDFExport
+                      title={this.state.titleComplete}
+                      message={this.state.messageComplete}
+                    />
+                  }
+                  fileName={`${this.state.titleComplete}.pdf`}
                 >
-                  <i className="far fa-file-pdf" aria-hidden="true"></i>
-                </button>
+                  {({ blob, url, loading, error }) =>
+                    loading ? "Loading document..." : "Download now!"
+                  }
+                </PDFDownloadLink>
+                {this.state.displayForm ? (
+                  <button
+                    type="button"
+                    onClick={this.savePDF}
+                    aria-label="Save To PDF"
+                  >
+                    <i className="far fa-file-pdf" aria-hidden="true"></i>
+                  </button>
+                ) : null}
+              </div>
+              
+              <CKEditor
+                editor={ClassicEditor}
+                disabled={this.state.formDisable ? true : false}
+                onChange={this.handleEditorChange}
+              />
+              <button onClick={this.pdflayer}>export</button>
+              {this.state.displayForm ? (
+                <Form
+                  saveTitle={this.saveTitle}
+                  disableForm={this.state.formDisable}
+                  saveMessage={this.saveMessage}
+                  wordCount={this.state.wordCount}
+                  enableForm={this.enableForm}
+                />
               ) : null}
             </div>
-            
-            <CKEditor
-              editor={ClassicEditor}
-              disabled={this.state.formDisable ? true : false}
-              onChange={this.handleEditorChange}
-            />
+          </main>
 
-            {this.state.displayForm ? (
-              <Form
-                saveTitle={this.saveTitle}
-                disableForm={this.state.formDisable}
-                saveMessage={this.saveMessage}
-                wordCount={this.state.wordCount}
-                enableForm={this.enableForm}
-              />
-            ) : null}
-          </div>
-        </main>
+          <footer className="wrapper">
+            <p>
+              ©2020 <a href="https://kajanthkumar.com/">Kajanth</a>,{" "}
+              <a href="https://www.robinnong.com">Robin</a> and{" "}
+              <a href="https://shanelbeebe.com/">Shanel</a>.
+            </p>
+          </footer>
+        </div>
+      </Router>
 
-        <footer className="wrapper">
-          <p>
-            ©2020 <a href="https://kajanthkumar.com/">Kajanth</a>,{" "}
-            <a href="https://www.robinnong.com">Robin</a> and{" "}
-            <a href="https://shanelbeebe.com/">Shanel</a>.
-          </p>
-        </footer>
-      </div>
     );
   }
 }
